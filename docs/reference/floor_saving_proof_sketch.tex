@@ -1,0 +1,306 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.68in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\AtBeginDocument{%
+  \setlength{\abovedisplayskip}{6pt plus 2pt minus 2pt}%
+  \setlength{\belowdisplayskip}{6pt plus 2pt minus 2pt}%
+  \setlength{\abovedisplayshortskip}{4pt plus 2pt minus 2pt}%
+  \setlength{\belowdisplayshortskip}{4pt plus 2pt minus 2pt}%
+}
+
+\newtheorem{theorem}{Theorem}
+\newcommand{\N}{\mathbb N}
+\newcommand{\dd}{\,d}
+\newcommand{\floor}[1]{\lfloor #1\rfloor}
+\newcommand{\fp}[1]{\{#1\}}
+
+\title{A Floor-Saving Lower Bound for Unique Positive Differences\\
+\large Proof sketch}
+\author{GPT-5.5 Pro\thanks{Large language model by OpenAI; assisted with derivation and drafting through prompted interaction.}
+\and
+Lech Mazur\thanks{Human contributor, curator, editor, and responsible contact for public posting.}}
+\date{}
+
+\begin{document}
+\maketitle
+
+All logarithms are natural, and $\N=\{1,2,3,\ldots\}$.  Let
+\[
+        \lambda=\frac1{2\log2},\qquad
+        \gamma=
+        \lim_{N\to\infty}\left(\sum_{m\le N}\frac1m-\log N\right),
+        \qquad
+        B_1=\frac12+\gamma-\log(\log2).
+\]
+
+\begin{theorem}
+Let $A\subseteq\N$ be such that, for every $n\ge1$, there is exactly one
+ordered pair $(a,b)\in A^2$ with $a>b$ and $n=a-b$.  Write this pair as
+$(a_n,b_n)$.  For every fixed $B>B_1$, arbitrarily large $n$ satisfy
+\[
+        a_n>\lambda\frac{n^2}{\log n-\log\log n+B}.
+\]
+Consequently,
+\[
+        \limsup_{n\to\infty}
+        \frac{a_n(\log n-\log\log n+B_1)}{n^2}\ge\lambda .
+\]
+\end{theorem}
+
+\begin{proof}[Sketch]
+For a representation $n=t-b$, call $t$ the \emph{top}.  The spine is
+\[
+        \text{spacing}\longrightarrow \text{top count}\longrightarrow
+        \text{integer floor}\longrightarrow \text{constant comparison}.
+\]
+The continuous majorant has the correct main term $X$.  The proof wins at the
+next scale: the integer floor subtracts a deterministic fractional-part mass of
+order $X/\log X$.
+
+\smallskip
+\noindent\textit{1. Contradiction setup and inverse weight.}
+Fix $B>B_1$ and suppose that eventually
+\[
+        a_n\le \Phi(n),
+        \qquad
+        \Phi(x)=\lambda\frac{x^2}{H(\log x)},
+        \qquad
+        H(w)=w-\log w+B.                                      \tag{1}
+\]
+Choose $N_0\ge2$ so that (1) holds for $n\ge N_0$ and $\Phi$ is increasing on
+$[N_0,\infty)$.  Put $T_*:=\Phi(N_0)$, let $\psi$ be the inverse of this branch,
+and set $f(t)=1/\psi(t)$ for $t\ge T_*$, extending $f$ constantly on $[0,T_*]$.
+Then $f$ is positive and nonincreasing.  Inverting
+$t=\lambda r^2/H(\log r)$ gives
+\[
+        f(t)=\sqrt{\frac{2\lambda}{t\log t}}(1+o(1)),
+        \qquad
+        I(T):=\int_0^T f(t)\dd t
+        =2\sqrt{\frac{2\lambda T}{\log T}}
+        +o\!\left(\sqrt{\frac T{\log T}}\right).              \tag{2}
+\]
+All $o$-terms below are for $X\to\infty$, with $A$ and $B$ fixed.
+
+\smallskip
+\noindent\textit{2. Spacing.}
+Choose an integer
+\[
+        Z_0>\max\left(T_*,\max_{1\le d<N_0}a_d\right).
+\]
+If $y<z$ are elements of $A$ and $z>Z_0$, then $(z,y)$ represents $d=z-y$.
+Uniqueness forces $z=a_d$.  The choice of $Z_0$ excludes $d<N_0$, so (1) gives
+$z\le\Phi(d)$ and hence $d\ge\psi(z)$.  Since $f$ is nonincreasing,
+\[
+        \int_y^z f(s)\dd s\ge (z-y)f(z)=d/\psi(z)\ge1.         \tag{3}
+\]
+Thus every large gap in $A$ costs one unit of $f$-mass.  Summing the gaps gives
+\[
+        |A\cap[1,T]|\le I(T)+O(1).                            \tag{4}
+\]
+We also need the weighted form.  If $z_1<\cdots<z_L$ are elements of $A$ above
+$Z_0$ and $W\ge0$ is nonincreasing, then
+\[
+        \sum_{j=2}^L W(z_j)
+        \le \int_{z_1}^{z_L} f(t)W(t)\dd t.                   \tag{5}
+\]
+Indeed, apply (3) to each gap $[z_{j-1},z_j]$ and use
+$W(t)\ge W(z_j)$ on that gap.
+
+\smallskip
+\noindent\textit{3. Top count and floor.}
+Let $X$ be a large integer, put $Y=\log X$ and $M=\Phi(X)$.  For all large
+$X$, every difference $1\le n\le X$ has top at most $M$: use (1) for
+$n\ge N_0$; the finitely many $n<N_0$ have fixed tops, eventually below $M$.
+Hence
+\[
+        X=\sum_{\substack{t\in A:\,t\le M}} r_t,
+        \qquad
+        r_t:=\#\{b\in A:t-X\le b<t\}.                         \tag{6}
+\]
+This identity is exact: a counted pair gives a difference in $[1,X]$, and
+uniqueness prevents double counting.  The terms with $t\le X$ are exactly
+$\binom{|A\cap[1,X]|}{2}$, so (4) gives
+\[
+        \sum_{\substack{t\in A:\,t\le X}} r_t
+        \le \frac12 I(X)^2+o(X/Y).                            \tag{7}
+\]
+
+For $t>X$ define
+\[
+        G_X(t)=\int_{t-X}^t f(s)\dd s .
+\]
+Since $f$ is nonincreasing, $G_X$ is nonincreasing.  If $t\in A$ and
+$t>X+Z_0$, list the bottoms counted by $r_t$ as $b_1<\cdots<b_{r_t}$ and put
+$b_{r_t+1}=t$.  Each upper endpoint in the gaps $[b_i,b_{i+1}]$ is above
+$Z_0$, and these gaps lie in $[t-X,t]$.  Hence (3) gives
+\[
+        r_t\le\sum_{i=1}^{r_t}\int_{b_i}^{b_{i+1}} f(s)\dd s
+        \le G_X(t).
+\]
+Since $r_t$ is an integer,
+\[
+        r_t\le \floor{G_X(t)}.                                \tag{8}
+\]
+This is the only non-continuous step.  Apply (5) to the large tops with
+$W(t)=\floor{G_X(t)}$.  The first large top has at most $I(X)+O(1)$ bottoms,
+and the fixed strip $X<t\le X+Z_0$ has $O(1)$ possible tops, each with
+$O(I(X))$ bottoms.  By (2), these losses are $o(X/Y)$.  Therefore
+\[
+        X\le \frac12I(X)^2+
+        \int_X^M f(t)\floor{G_X(t)}\dd t+o(X/Y).               \tag{9}
+\]
+Equivalently,
+\[
+        X\le J_B(X)-E(X)+o(X/Y),                               \tag{10}
+\]
+where
+\[
+        J_B(X)=\frac12I(X)^2+\int_X^M f(t)G_X(t)\dd t,
+        \qquad
+        E(X)=\int_X^M f(t)\fp{G_X(t)}\dd t .
+\]
+
+\smallskip
+\noindent\textit{4. Continuous count.}
+The continuous majorant is
+\[
+        J_B(X)=X+
+        \lambda(3-2B-2\log(\log2))\frac{X}{Y}+o(X/Y).          \tag{11}
+\]
+Here is the constant ledger.  First,
+\[
+        \frac12I(X)^2=4\lambda X/Y+o(X/Y).                     \tag{12}
+\]
+Next split
+\[
+        \int_X^M f(t)G_X(t)\dd t
+        =X\int_X^M f(t)^2\dd t+R(X),
+\]
+where
+\[
+        R(X)=\int_X^M f(t)\int_{t-X}^t(f(s)-f(t))\dd s\dd t .
+\]
+For the $f^2$ term use $t=\Phi(e^w)$ and write $w_0=\log\psi(X)$.  Then
+\[
+        w_0=Y/2+(\log Y)/2-(\log(2\lambda))/2+o(1),
+        \qquad M=\Phi(e^Y).
+\]
+Also $f(\Phi(e^w))=e^{-w}$ and $dt=\Phi'(e^w)e^w\,dw$, so
+\[
+        f(t)^2\dd t
+        =\lambda\left(\frac2{H(w)}-\frac{H'(w)}{H(w)^2}\right)\dd w.
+\]
+Thus
+\[
+        \int_X^M f(t)^2\dd t
+        =\lambda\left[2\int_{w_0}^{Y}\frac{\dd w}{H(w)}
+        +\frac1{H(Y)}-\frac1{H(w_0)}\right].                  \tag{13}
+\]
+Writing $w_0=Y/2+\rho_X$, the three $1/Y$ contributions inside the bracket are
+\[
+\begin{aligned}
+        2\int_{w_0}^{Y}\frac{\dd w}{w}
+        &=2\log2-\frac{4\rho_X}{Y}+o(1/Y),\\
+        2\int_{w_0}^{Y}\frac{\log w-B}{w^2}\dd w
+        &=\frac{2\log Y-4\log2+2-2B}{Y}+o(1/Y),\\
+        \frac1{H(Y)}-\frac1{H(w_0)}
+        &=-\frac1Y+o(1/Y).
+\end{aligned}                                                  \tag{14}
+\]
+Since $\rho_X=(\log Y-\log(2\lambda))/2+o(1)$, the logarithms cancel and,
+using $2\lambda\log2=1$,
+\[
+        X\int_X^M f(t)^2\dd t
+        =X+\lambda(1-2B+2\log(\lambda/2))\frac{X}{Y}+o(X/Y).  \tag{15}
+\]
+For $R(X)$, put $t=Xu$ and $s=Xv$.  The local form of (2) on bounded
+$u$-ranges, followed by truncation, gives
+\[
+        R(X)=\frac{2\lambda X}{Y}
+        \int_1^\infty\left(\int_{u-1}^u\frac{\dd v}{\sqrt{uv}}-
+        \frac1u\right)\dd u+o(X/Y)
+        =2\lambda(2\log2-1)X/Y+o(X/Y).                       \tag{16}
+\]
+Adding (12), (15), and (16), and using
+$4\log2+2\log(\lambda/2)=-2\log(\log2)$, gives (11).
+
+\smallskip
+\noindent\textit{5. Floor saving.}
+The floor subtracts
+\[
+        E(X)=2\lambda(1-\gamma)X/Y+o(X/Y).                    \tag{17}
+\]
+Set
+\[
+        q(t)=Xf(t)=X/\psi(t).
+\]
+The range $\Phi(X/Q)\le t\le M$ corresponds to $1\le q\le Q$.  With
+$r=\psi(t)=X/q$, for every measurable $|F_X|\le1$,
+\begin{align*}
+        \int_{\Phi(X/Q)}^M f(t)F_X(q(t))\dd t
+        &=X\int_1^Q \frac{\Phi'(X/q)}{X/q}F_X(q)\frac{\dd q}{q^2}  \\
+        &=\frac{2\lambda X}{Y}\int_1^Q F_X(q)\frac{\dd q}{q^2}
+        +o_Q(X/Y).                                             \tag{18}
+\end{align*}
+Also, uniformly for $1\le q\le Q$,
+\[
+        G_X(\Phi(X/q))=q+o_Q(1),                               \tag{19}
+\]
+because $f$ varies by $o_Q(1)$ relatively on the interval of length $X$ ending
+at $\Phi(X/q)$, while $Xf(\Phi(X/q))=q$ exactly.
+
+Apply (18) with $F_X(q)=\fp{G_X(\Phi(X/q))}$.  By (19), the integrand converges
+to $\fp q$ away from the finitely many integer discontinuities in $[1,Q]$;
+small neighborhoods of those discontinuities have arbitrarily small
+$q^{-2}\dd q$ mass.  Thus the saving is deterministic convergence under the
+natural $q$-measure, not an equidistribution assertion.  The range $q>Q$ has
+mass only $O(X/(QY))$, since
+\[
+        \int_X^{\Phi(X/Q)} f(t)\dd t
+        =\int_{\psi(X)}^{X/Q}\frac{\Phi'(r)}r\dd r
+        \ll \frac{X}{QY}.
+\]
+Letting $X\to\infty$ and then $Q\to\infty$,
+\[
+        E(X)=\frac{2\lambda X}{Y}
+        \int_1^\infty\frac{\fp q}{q^2}\dd q+o(X/Y).
+\]
+Finally,
+\[
+        \int_1^\infty\frac{\fp q}{q^2}\dd q
+        =\sum_{m\ge1}\int_m^{m+1}\frac{q-m}{q^2}\dd q
+        =\sum_{m\ge1}\left(\log\frac{m+1}{m}-\frac1{m+1}\right)
+        =1-\gamma,
+\]
+which proves (17).  On the $q$-scale the measure is
+$(2\lambda X/Y)q^{-2}\dd q$, and the floor removes the average fractional part
+$1-\gamma$.
+
+\smallskip
+\noindent\textit{6. Contradiction.}
+Combining (10), (11), and (17),
+\[
+\begin{aligned}
+        X
+        &\le X+\lambda(3-2B-2\log(\log2))X/Y
+        -2\lambda(1-\gamma)X/Y+o(X/Y) \\
+        &=X-2\lambda(B-B_1)X/Y+o(X/Y).
+\end{aligned}
+\]
+Since $B>B_1$, this is impossible for large $X$.  Thus (1) cannot hold
+eventually.
+
+For the endpoint limsup, apply the conclusion with any fixed $B^*>B_1$ along
+an unbounded sequence $n_j$.  Then
+\[
+        \frac{a_{n_j}(\log n_j-\log\log n_j+B_1)}{n_j^2}
+        >\lambda
+        \frac{\log n_j-\log\log n_j+B_1}
+             {\log n_j-\log\log n_j+B^*}
+        \to\lambda,
+\]
+so the limsup is at least $\lambda$.
+\end{proof}
+
+\end{document}

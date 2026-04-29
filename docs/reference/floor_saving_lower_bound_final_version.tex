@@ -1,0 +1,2773 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage[unicode=true,colorlinks=true,citecolor=blue,linkcolor=blue,urlcolor=blue]{hyperref}
+\usepackage{bookmark}
+\hypersetup{
+  pdftitle={A Floor-Saving Quadratic-over-Logarithmic Lower Bound for Representation Tops in Erd\H{o}s Problem \#1194},
+  pdfauthor={GPT-5.5 Pro and Lech Mazur},
+  pdfsubject={Perfect difference sets and representation tops},
+  pdfkeywords={Erd\H{o}s Problem 1194, perfect difference sets, Sidon sets, representation functions}
+}
+\allowdisplaybreaks[1]
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\N}{\mathbb{N}}
+\newcounter{proofheading}
+\newcounter{proofsubheading}[proofheading]
+\newcommand{\proofheading}[1]{%
+  \refstepcounter{proofheading}%
+  \medskip\phantomsection%
+  \pdfbookmark[1]{#1}{proofheading.\theproofheading}%
+  \noindent\textbf{#1}\par\smallskip}
+\newcommand{\proofsubheading}[1]{%
+  \refstepcounter{proofsubheading}%
+  \smallskip\phantomsection%
+  \pdfbookmark[2]{#1}{proofsubheading.\theproofheading.\theproofsubheading}%
+  \noindent\textit{#1}\par\smallskip}
+
+\title{A Floor-Saving Quadratic-over-Logarithmic Lower Bound for Representation Tops in Erd\H{o}s Problem \#1194}
+\author{GPT-5.5 Pro\thanks{Large language model by OpenAI; performed nearly all of the mathematical derivation and LaTeX drafting through prompted interaction, with human prompting, review, and editing.}
+\and
+Lech Mazur\thanks{Human contributor, prompter, curator, editor, auditor, and responsible contact for public posting.}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Erd\H{o}s Problem \#1194 asks how fast the representation top must grow when
+$A\subseteq\mathbb{N}=\{1,2,3,\ldots\}$ is a perfect difference set in the infinite-integer sense used here,
+meaning that every integer $n\ge1$ has a unique ordered representation
+\[
+n=u(n)-v(n),
+\qquad
+u(n),v(n)\in A,
+\qquad
+u(n)>v(n).
+\]
+Thus $u(n)$ is the larger element in the representation of $n$, corresponding to the top entry
+in the original problem statement, not the $n$th element of $A$. The main result proves an
+explicit quadratic-over-logarithmic lower bound in this setting. Let
+\[
+\lambda=\frac1{2\log 2},
+\qquad
+B_1=\frac12+\gamma-\log(\log 2),
+\]
+where $\gamma$ is the Euler--Mascheroni constant. All logarithms in the displayed formulae are
+natural. For every fixed $B>B_1$, there are arbitrarily large $n$ for which the denominator below is
+positive and
+\[
+u(n)>\lambda\,\frac{n^2}{\log n-\log\log n+B}.
+\]
+Equivalently, for this fixed $B$, the eventual bound
+$u(n)\le\lambda n^2/(\log n-\log\log n+B)$ cannot hold. Consequently, for every fixed real $C$,
+\[
+ \limsup_{n\to\infty}
+ \frac{u(n)(\log n-\log\log n+C)}{n^2}
+ \ge \frac1{2\log 2}.
+\]
+A companion Lean proof is available at
+\url{https://github.com/lechmazur/erdos_1194/}. No pointwise infinitely-often inequality at
+$B=B_1$ is asserted.
+
+\end{abstract}
+
+\medskip
+\noindent\textbf{MSC 2020.} 11B13; 11B34; 05B10.
+
+\noindent\textbf{Keywords.} perfect difference sets; Sidon sets; Erd\H{o}s problems; representation functions.
+
+All logarithms are natural. Let
+\[
+\N=\{1,2,3,\ldots\}.
+\]
+Let
+\[
+\lambda:=\frac1{2\log 2}.
+\]
+Let $\gamma$ denote the Euler--Mascheroni constant,
+\[
+\gamma=\lim_{K\to\infty}\left(\sum_{m=1}^K\frac1m-\log K\right),
+\]
+and put
+\[
+B_1:=\frac12+\gamma-\log(\log 2).
+\]
+Numerically,
+\[
+\lambda=0.721347520444\ldots,
+\qquad
+B_1=1.443728585483\ldots.
+\]
+Since $0<\log 2<1$, we have $\log(\log 2)<0$; in particular, $B_1>0$.
+
+\medskip
+\noindent\textit{Asymptotic notation.} Throughout, $F\ll_{\mathcal P}G$ means
+$|F|\le C_{\mathcal P}G$ on the stated range, $F\gg_{\mathcal P}G$ means
+$G\ll_{\mathcal P}F$, and $F\asymp_{\mathcal P}G$ means both estimates hold. The same
+subscript convention is used for $O$-terms.
+
+\medskip
+\noindent\textit{Context and status.} The hypothesis that every $n\ge1$ has a unique ordered
+representation $n=a-b$ with $a,b\in A$ and $a>b$ appears in Erd\H{o}s's 1980 problem survey
+\cite[p.~100]{Erdos1980}; it is also catalogued as Erd\H{o}s Problem \#1194
+\cite{Bloom1194}. Here, sets satisfying this hypothesis are called perfect difference sets in
+this infinite-integer setting; this terminology is local to the present problem and is not intended
+to invoke the finite cyclic perfect-difference-set convention. Recent work on the finite
+Sidon-extension conjecture, including counterexamples to that finite conjecture, is logically
+independent of the infinite representation-top growth function studied here
+\cite{AlexeevMixon2026}. Throughout, write the unique representation of $n$ as
+\[
+n=u(n)-v(n),
+\qquad
+u(n),v(n)\in A,
+\qquad
+u(n)>v(n).
+\]
+Then $u(n)$ is the representation top, corresponding to the larger element in the original
+problem statement, not the $n$th element of $A$.
+
+The catalogue page records a greedy construction due to Lev, with growth $u(n)\ll n^3$ in this
+representation-top notation \cite{Lev2004,Bloom1194}. It also records the standard Sidon-density
+argument, based on Erd\H{o}s's upper bound for infinite Sidon sequences as presented, for example,
+by Halberstam and Roth, which yields $u(n)\gg n\log n$ infinitely often
+\cite{HalberstamRoth1966,Bloom1194}. The same catalogue page records unrefereed
+discussion-thread claims at the $n^{2-o(1)}$ scale; those claims are not used here
+\cite{Bloom1194}. The present draft gives
+a self-contained explicit lower bound at the $n^2/\log n$ scale, including the constant and the
+second-order denominator below.
+
+The perfect-difference hypothesis implies the Sidon property that all unordered pair sums
+$a+b$, with $a\le b$ and $a,b\in A$, are distinct. Indeed, suppose $a\le b$, $c\le d$, and
+$a+b=c+d$. If $b=d$, then $a=c$. Otherwise, after swapping the two pairs if necessary, $b>d$, and
+then
+\[
+b-d=c-a>0.
+\]
+The two ordered pairs cannot coincide: if $(b,d)=(c,a)$, then $b=c$ and $d=a$, so
+$b>d$ gives $c>a$, while $c\le d=a$ gives $c\le a$. This gives two distinct ordered
+representations, $(b,d)$ and $(c,a)$, of the same positive difference, contradicting uniqueness.
+If all representation tops up to difference $n$ were too
+small, the first $n$ unique difference pairs would force too many elements of $A$ inside a bounded
+interval, contradicting the classical infinite-Sidon counting bound at that scale. Cilleruelo and
+Nathanson constructed dense perfect difference sets from dense Sidon sets, showing that the
+existence theory for perfect difference sets is linked to the density theory of Sidon sets
+\cite{CillerueloNathanson2008}.
+
+\medskip
+\noindent\textit{Scope.} Existence is known from the cited constructions. The theorem is universal
+over all sets satisfying the hypothesis; it does not use or reprove any construction of such sets.
+The proof starts with an arbitrary set $A$ satisfying the perfect-difference hypothesis and derives
+the stated lower bound for its representation tops. This draft does not determine the optimal
+growth of $u(n)$.
+
+\begin{theorem}\label{thm:main}
+Let $A\subseteq\N$ be such that, for every $n\ge 1$, there is exactly one ordered pair
+$(a,b)\in A^2$ with $a>b$ and $a-b=n$. Write this pair as $(u(n),v(n))$, so
+$n=u(n)-v(n)$ and $u(n)>v(n)$.
+For every fixed $B>B_1$, there are arbitrarily large integers $n$ such that
+\[
+ u(n)>
+ \lambda\,
+ \frac{n^2}{\log n-\log\log n+B}.
+\]
+No uniformity as $B\downarrow B_1$ is asserted. The displayed denominator is positive for all
+sufficiently large $n$, so there is no large-$n$ sign ambiguity.
+
+Equivalently, for this fixed $B$, the eventual non-strict bound
+$u(n)\le \lambda n^2/(\log n-\log\log n+B)$ cannot hold.
+
+As a limsup consequence, for every fixed real $C$,
+\[
+ \limsup_{n\to\infty}
+ \frac{u(n)(\log n-\log\log n+C)}{n^2}
+ \ge
+ \frac1{2\log 2}.
+\]
+Taking $C=B_1$ gives the endpoint limsup version. Since
+$\log n/(\log n-\log\log n)\to1$, the conclusion with $C=0$ also gives
+\[
+ \limsup_{n\to\infty}\frac{u(n)\log n}{n^2}
+ \ge \lambda.
+\]
+\end{theorem}
+
+\noindent\textit{Remark.} Theorem~\ref{thm:main} does not determine the optimal growth of $u(n)$.
+It is a universal lower bound for representation tops, not a construction and not a matching
+upper bound. The proof below does not establish the pointwise infinitely-often inequality at the
+endpoint $B=B_1$. The endpoint statement is obtained only by applying the proved result with any fixed
+$B^*>B_1$ and then taking a limsup along the resulting unbounded sequence; the proof never
+substitutes $B=B_1$ into the contradiction argument. More generally, any fixed additive constant
+in the limsup denominator gives the same leading constant. No optimality of $B_1$ as a sharp
+pointwise threshold is claimed.
+
+\noindent\textit{Proof roadmap.} The proof argues by contradiction. The assumed upper bound
+gives a spacing rule for elements of $A$, which yields a continuous majorant for the counting
+identity by tops. The integer floor in that identity produces a fixed normalized saving, which
+contradicts the continuous asymptotic when $B>B_1$. More precisely, the continuous second-order
+term is reduced by the floor-saving term $2\lambda(1-\gamma)X/\log X$, where
+$\{q\}$ denotes the fractional part of $q$; the integral
+$1-\gamma=\int_1^\infty \{q\}q^{-2}\,dq>0$ appears after the later change of variables
+$q=X/\psi(t)$. In compressed form, the dependency chain is
+\[
+\text{spacing}\Rightarrow\text{counting majorant}\Rightarrow J_B(X)-E(X)
+\Rightarrow\text{a negative }X/\log X\text{ coefficient}.
+\]
+
+\noindent\textit{Constant bookkeeping.} The final comparison uses
+\[
+\lambda=\frac1{2\log 2},
+\qquad
+B_1=\frac12+\gamma-\log(\log 2),
+\]
+and the two second-order coefficients
+\[
+C_{\rm cont}(B):=\lambda\bigl(3-2B-2\log(\log 2)\bigr),
+\qquad
+C_{\rm floor}:=2\lambda(1-\gamma).
+\]
+At the endpoint,
+\[
+C_{\rm cont}(B_1)=C_{\rm floor}=0.609948863612\ldots.
+\]
+The continuous coefficient minus the floor-saving coefficient is
+\[
+C_{\rm cont}(B)-C_{\rm floor}
+=\lambda\bigl(3-2B-2\log(\log 2)\bigr)-2\lambda(1-\gamma)
+=-2\lambda(B-B_1).
+\]
+The main auxiliary objects below are the eventual majorant $\Phi$, its inverse $\psi$, the
+nonincreasing function $f=1/\psi$ on the inverse tail, the top-window integral $G_X$, the
+continuous majorant $J_B(X)$, and the floor saving $E(X)$.
+
+\begin{proof}
+Use the notation $u(n),v(n)$ from the theorem. Fix
+\[
+B>B_1.
+\]
+All thresholds and implicit constants below are attached to the fixed set $A$, the fixed parameter
+$B$, and the contradiction data introduced below; no uniformity over all admissible sets $A$, or
+as $B\downarrow B_1$, is asserted.
+Recall that
+\[
+\lambda=\frac1{2\log 2}.
+\]
+Since $B>B_1$ and $B_1>0$, we have $B>0$. Put
+\[
+H(w):=w-\log w+B\qquad(w>0).
+\]
+For $w>0$, the elementary inequality $w-\log w\ge1$, together with $B>B_1>0$, gives
+\[
+H(w)>0.
+\]
+Also
+\[
+H'(w)=1-\frac1w,
+\]
+and
+\[
+2H(w)-H'(w)
+=
+2(w-\log w)+2B-1+\frac1w
+\ge
+1+2B+\frac1w>0.
+\]
+Thus, for every $x>1$, define
+\[
+\Phi(x):=\lambda\frac{x^2}{\log x-\log\log x+B}
+=\lambda\frac{x^2}{H(\log x)}.
+\]
+Then
+\[
+\Phi(e^w)=\lambda\frac{e^{2w}}{H(w)}
+\qquad(w>0),
+\]
+and
+\[
+\frac{d}{dw}\Phi(e^w)
+=
+\lambda e^{2w}\frac{2H(w)-H'(w)}{H(w)^2}>0.
+\]
+Also, as $x\to\infty$,
+\[
+\Phi(x)\sim \lambda\frac{x^2}{\log x}\to\infty.
+\]
+Assume, for contradiction, that
+\[
+u(n)\le \Phi(n)
+\tag{1}\label{eq:upper-bound-assumption}
+\]
+for all sufficiently large $n$.
+
+Choose and fix an integer $N_0\ge 3$ large enough that
+\[
+u(n)\le\Phi(n)\qquad(n\ge N_0),
+\]
+and that
+\[
+\frac12\log x\le H(\log x)\le 2\log x,
+\qquad
+\log x\le 2H(\log x)-H'(\log x)\le 4\log x
+\qquad(x\ge N_0).
+\]
+Such an $N_0$ exists because the assumed bound holds eventually and
+\[
+H(\log x)\sim\log x,
+\qquad
+2H(\log x)-H'(\log x)\sim2\log x
+\qquad(x\to\infty).
+\]
+The displayed comparisons are used only for tail estimates; positivity of $H(\log x)$ and
+$2H(\log x)-H'(\log x)$ already holds for every $x>1$.
+Since
+\[
+\Phi'(x)
+=
+\lambda x\frac{2H(\log x)-H'(\log x)}{H(\log x)^2},
+\]
+we have $\Phi'(x)>0$ for every $x\ge N_0$. Let
+\[
+T_*:=\Phi(N_0).
+\]
+Since $\lambda>0$, $N_0>0$, and $H(\log N_0)>0$, the definition
+$T_*=\lambda N_0^2/H(\log N_0)$ gives $T_*>0$. Since $\Phi$ is continuous, strictly increasing on
+$[N_0,\infty)$, and tends to infinity, it maps $[N_0,\infty)$ bijectively onto $[T_*,\infty)$.
+Let $\psi$ be the inverse of $\Phi$ on this interval. Since $\Phi$ is $C^1$ and $\Phi'>0$ on
+$[N_0,\infty)$, the inverse $\psi$ is $C^1$ on $(T_*,\infty)$. All later uses of $\psi$ occur
+at arguments at least $T_*$, after the relevant lower thresholds have been imposed. Thus
+whenever $\psi$ appears below, it denotes this branch only; inversions of $\Phi$ are never
+taken outside $[N_0,\infty)$.
+
+Define
+\[
+f(t):=\frac1{\psi(t)}\qquad(t\ge T_*).
+\]
+Extend $f$ to $[0,T_*)$ by
+\[
+f(t):=f(T_*)\qquad(0\le t<T_*).
+\]
+Then $f$ is positive, nonincreasing, locally bounded, and measurable on $[0,\infty)$. Indeed,
+$\psi$ is increasing on $[T_*,\infty)$, so $1/\psi$ is nonincreasing on $[T_*,\infty)$. Also
+$\psi(T_*)=N_0$, and hence $f(t)\le f(T_*)$ for $t\ge T_*$. Therefore the constant extension to
+$[0,T_*)$ preserves monotonicity across the joining point. Moreover, $f$ is $C^1$ on the smooth
+tail $(T_*,\infty)$. All integrals below are Lebesgue integrals.
+
+The artificial extension on $[0,T_*)$ is only a bookkeeping device. Only the values $t\ge T_*$
+are tied to the inverse branch $\psi$; values below $T_*$ are used solely inside integrals. Since
+$T_*$ is fixed and $f$ is bounded there, every contribution from this interval is $O_{A,B}(1)$,
+hence negligible on the scales $\sqrt{X/\log X}$ and $X/\log X$ used later. It is also negligible
+in the normalized $L^1$ rescaling used below, where its contribution is $O_{A,B}(\sqrt{Y/X})$.
+
+\begin{lemma}[Uniform inverse-branch convention on compact $q$-ranges]
+For every fixed $Q\ge1$, all sufficiently large $X$ satisfy $X/Q\ge N_0$, and then
+\[
+\psi(\Phi(X/q))=X/q
+\qquad(1\le q\le Q).
+\]
+Consequently, after increasing the lower threshold in $X$ when necessary, every later occurrence
+of $\psi$ is evaluated on the inverse branch from $[T_*,\infty)$ to $[N_0,\infty)$ fixed above.
+\end{lemma}
+
+\begin{proof}
+For fixed $Q\ge1$, the inequality $X/Q\ge N_0$ holds for all sufficiently large $X$. Then
+$X/q\ge X/Q\ge N_0$ for every $1\le q\le Q$, and the identity follows from the definition of the
+inverse branch. The displayed choices used later, including $M=\Phi(X)$, $\Phi(X/Q)$, and
+$\Phi(X/q)$ for fixed $Q$ and $1\le q\le Q$, are covered by this compact-range observation;
+separately, $X\ge T_*$ for all sufficiently large $X$.
+\end{proof}
+
+\proofheading{1. Spacing}
+
+Write
+\[
+A=\{x_1<x_2<x_3<\cdots\}.
+\]
+This enumeration is infinite because every positive integer occurs as a difference of two
+elements of $A$. Hence $A$ is unbounded.
+
+Since $N_0\ge3$, the finite maximum below is over a nonempty set. Choose an integer
+\[
+Z_0\in\mathbb N,
+\qquad
+Z_0>\max\left(T_*,\max_{1\le d<N_0}u(d)\right).
+\]
+The integrality of $Z_0$ is used only when bounding integer tops in the short interval
+$(X,X+Z_0]$.
+
+\medskip
+\noindent\textit{Threshold and uniformity convention.} Lower thresholds may be enlarged finitely
+many times after the fixed data $A,B,N_0,T_*,Z_0$ and any fixed truncation parameter have been
+chosen. Thus all later occurrences of $\log\log$, $\Phi$, $\psi$, and denominators of the form
+$\log z-\log\log z+C$ are on ranges where they are defined and have the asserted sign.
+
+Unless explicitly stated otherwise, all $O$- and $o$-terms are taken after the contradiction data
+have been fixed. Constants depending on $A,B,N_0,T_*,Z_0$ are written as $O_{A,B}$; lower
+thresholds may also depend on previously fixed auxiliary parameters. If a truncation parameter such
+as $U$ or $Q$ appears, it is fixed before $X\to\infty$ and is sent to its limiting value only after
+that limit. Any tail estimate later used after $U$ or $Q$ is sent to infinity states the needed
+independence of the displayed implicit constant; no truncation parameter varies with $X$. Whenever
+$Y=\log X$ is used below, the scale separations $X/Y\to\infty$ and $X/Y^2\to\infty$ are also used
+only on this eventual range.
+
+The notation convention stated above remains in force. Extra subscripts record extra fixed data
+on which the implicit constant may depend.
+
+\proofsubheading{Spacing and gap-integral domination}
+
+\begin{lemma}[Spacing and gap-integral domination]
+If $y<z$ are elements of $A$ and $z>Z_0$, then
+\[
+z-y\ge \psi(z).
+\tag{2}\label{eq:spacing}
+\]
+Consequently,
+\[
+\int_y^z f(s)\,ds\ge1.
+\tag{3}\label{eq:gap-integral}
+\]
+\end{lemma}
+
+\begin{proof}
+Put
+\[
+d:=z-y.
+\]
+Then $d$ is a positive integer.
+The ordered pair $(z,y)$ represents $d$. By uniqueness of the representing pair for $d$,
+\[
+u(d)=z.
+\]
+If $d<N_0$, then
+\[
+z=u(d)\le \max_{1\le m<N_0}u(m)<Z_0,
+\]
+contradicting $z>Z_0$. Hence $d\ge N_0$. By the assumed upper bound
+\eqref{eq:upper-bound-assumption},
+\[
+z=u(d)\le \Phi(d).
+\]
+Since $d\ge N_0$, $z>Z_0>T_*$, and $\Phi$ is increasing on $[N_0,\infty)$, applying the
+inverse branch $\psi:[T_*,\infty)\to[N_0,\infty)$ to $z\le\Phi(d)$ gives
+\[
+d\ge \psi(z).
+\]
+Thus $z-y=d\ge\psi(z)$, proving \eqref{eq:spacing}.
+
+Since $f$ is nonincreasing, $f(s)\ge f(z)$ for $y\le s\le z$. Also $z>Z_0>T_*$ gives
+$f(z)=1/\psi(z)$. Hence
+\[
+\int_y^z f(s)\,ds
+\ge
+(z-y)f(z)
+=
+\frac{z-y}{\psi(z)}
+\ge1.
+\]
+\end{proof}
+
+\proofsubheading{Counting-function majorant}
+
+For real $T\ge0$, define
+\[
+\mathcal N_A(T):=|A\cap[1,T]|,
+\]
+where $[1,T]$ is understood to be empty if $0\le T<1$.
+
+\begin{lemma}[Counting-function majorant]
+For all real $T\ge0$,
+\[
+\mathcal N_A(T)\le C_*+\int_0^T f(s)\,ds
+\tag{4}\label{eq:counting-function-bound}
+\]
+for some constant $C_*=C(A,B,N_0,T_*,Z_0)$.
+\end{lemma}
+
+\begin{proof}
+In the argument below one may take $C_*=j_0$ after $j_0$ has been defined. By unboundedness and
+the well-ordering of $\N$, there is a first element of $A$ exceeding $Z_0$; call it $x_{j_0}$. If
+$\mathcal N_A(T)\le j_0$, then
+\eqref{eq:counting-function-bound} holds with $C_*\ge j_0$. Otherwise, let
+$m=\mathcal N_A(T)>j_0$.
+Then $x_m\le T$, and by \eqref{eq:gap-integral},
+\[
+m-j_0
+\le
+\sum_{j=j_0+1}^m\int_{x_{j-1}}^{x_j}f(s)\,ds
+\le
+\int_0^T f(s)\,ds.
+\]
+Thus
+\[
+\mathcal N_A(T)=m\le j_0+\int_0^T f(s)\,ds,
+\]
+which proves \eqref{eq:counting-function-bound} with $C_*=j_0$.
+\end{proof}
+
+\proofheading{2. Estimates for \texorpdfstring{$f$}{f}}
+
+For the tail estimates in this part, let $t>T_*$ and write
+\[
+r=\psi(t).
+\]
+Then
+\[
+t=\Phi(r)=\lambda\frac{r^2}{\log r-\log\log r+B}=\lambda\frac{r^2}{H(\log r)}.
+\]
+As $t\to\infty$, also $r\to\infty$. Since
+\[
+H(\log r)\asymp_B \log r
+\]
+for large $r$, we have
+\[
+\log t
+=
+2\log r-\log H(\log r)+O_B(1)
+=
+2\log r+O_B(\log\log r).
+\]
+Since $O_B(\log\log r)=o(\log r)$, this first implies
+\[
+\log r\asymp_B \log t.
+\]
+Consequently $\log H(\log r)=O_B(\log\log t)$, because $H(\log r)\asymp_B\log r$ on the tail.
+Substituting this back into
+\[
+\log t=2\log r-\log H(\log r)+O_B(1)
+\]
+gives
+\[
+\log r=\frac12\log t+O_B(\log\log t).
+\]
+Equivalently,
+\[
+\log r=\frac12\log t
+\left(1+O_B\left(\frac{\log\log t}{\log t}\right)\right).
+\]
+Therefore
+\[
+\log\log r
+=
+\log\log t+
+\log\left(\frac12+O_B\left(\frac{\log\log t}{\log t}\right)\right)
+=\log\log t+O_B(1).
+\]
+Also,
+\[
+f(t)^2
+=
+\frac1{r^2}
+=
+\frac{\lambda}{t\,H(\log r)}.
+\]
+Because
+\[
+H(\log r)
+=\log r-\log\log r+B
+=\frac12\log t+O_B(\log\log t),
+\]
+we have
+\[
+\frac1{H(\log r)}
+=
+\frac2{\log t}
+\left(1+O_B\left(\frac{\log\log t}{\log t}\right)\right).
+\]
+Together with $f(t)^2=\lambda/(tH(\log r))$, and using that the factor in parentheses is
+$1+o(1)>0$ on the tail and $\sqrt{1+O(\varepsilon)}=1+O(\varepsilon)$ for small
+$\varepsilon$, this gives after taking the positive square root, uniformly for all sufficiently
+large $t$,
+\[
+f(t)
+=
+\sqrt{\frac{2\lambda}{t\log t}}
+\left(1+O_B\left(\frac{\log\log t}{\log t}\right)\right).
+\tag{5}\label{eq:f-asymptotic}
+\]
+In particular,
+\[
+f(t)\ll_B \frac1{\sqrt{t\log t}}
+\qquad(t\to\infty).
+\tag{6}\label{eq:f-upper-bound}
+\]
+
+\proofsubheading{Integral asymptotic for \texorpdfstring{$f$}{f}}
+
+\begin{lemma}[Integral asymptotic for \texorpdfstring{$f$}{f}]
+As $X\to\infty$,
+\[
+\int_0^X f(t)\,dt
+=
+2\sqrt{\frac{2\lambda X}{\log X}}
++
+o\left(\sqrt{\frac X{\log X}}\right).
+\tag{7}\label{eq:f-integral-asymptotic}
+\]
+\end{lemma}
+
+\begin{proof}
+We first record the elementary estimate
+\[
+\int_{T_1}^V\frac{dt}{\sqrt{t\log t}}
+\ll
+\sqrt{\frac V{\log V}}
+\qquad(V\to\infty),
+\tag{8}\label{eq:elementary-integral-bound}
+\]
+for any fixed sufficiently large $T_1$. For $V\ge e^2$,
+\[
+\frac{d}{dV}\sqrt{\frac V{\log V}}
+=
+\frac{\log V-1}{2\sqrt V(\log V)^{3/2}}
+\asymp
+\frac1{\sqrt{V\log V}},
+\]
+so increasing $T_1$ if necessary and integrating gives \eqref{eq:elementary-integral-bound}.
+
+Now put
+\[
+Y:=\log X.
+\]
+Since $X/Y^2\to\infty$, all thresholds below are exceeded for sufficiently large $X$. The
+bounded initial interval contributes $O_{A,B}(1)$. By \eqref{eq:f-upper-bound}, for any fixed
+sufficiently large $T_1$,
+\[
+\int_0^{X/Y^2} f(t)\,dt
+=
+O_{A,B}(1)+O_B\left(\int_{T_1}^{X/Y^2}\frac{dt}{\sqrt{t\log t}}\right).
+\]
+Using \eqref{eq:elementary-integral-bound}, the last integral is
+\[
+\ll_B
+\sqrt{\frac{X/Y^2}{\log(X/Y^2)}}
+\ll_B
+\frac{\sqrt X}{Y^{3/2}}
+=
+o\left(\sqrt{\frac X Y}\right).
+\]
+Thus
+\[
+\int_0^{X/Y^2} f(t)\,dt=o\left(\sqrt{\frac X Y}\right).
+\]
+On the interval $X/Y^2\le t\le X$, we have
+\[
+\log t=Y+O(\log Y)
+\]
+uniformly. Hence the error term in \eqref{eq:f-asymptotic} is uniformly $o(1)$ on this
+interval; explicitly,
+\[
+\sup_{X/Y^2\le t\le X}
+\left|
+\frac{f(t)}{\sqrt{2\lambda/(tY)}}-1
+\right|\to0.
+\]
+Therefore
+\[
+f(t)=\sqrt{\frac{2\lambda}{Y}}\,t^{-1/2}(1+o(1))
+\]
+uniformly for $X/Y^2\le t\le X$. Also,
+\[
+\int_{X/Y^2}^X t^{-1/2}\,dt
+=
+2\sqrt X\left(1-\frac1Y\right)
+=
+2\sqrt X+O\left(\frac{\sqrt X}{Y}\right).
+\]
+It follows that
+\[
+\int_{X/Y^2}^X f(t)\,dt
+=
+2\sqrt{\frac{2\lambda X}{Y}}
++
+o\left(\sqrt{\frac X Y}\right),
+\]
+which proves \eqref{eq:f-integral-asymptotic}.
+\end{proof}
+
+Since $Z_0$ is fixed, the same estimate remains
+valid with $X+Z_0$ in place of $X$. Indeed, apply \eqref{eq:f-integral-asymptotic} with
+$X+Z_0$ in place of $X$; writing $Y=\log X$,
+\[
+\sqrt{\frac{X+Z_0}{\log(X+Z_0)}}
+\sim
+\sqrt{\frac X{\log X}}
+=
+\sqrt{\frac X Y}.
+\]
+Thus
+\[
+\int_0^{X+Z_0} f(t)\,dt
+=
+2\sqrt{\frac{2\lambda X}{Y}}
++
+o\left(\sqrt{\frac X Y}\right)
+=
+O_{A,B}\left(\sqrt{\frac X Y}\right).
+\]
+Together with \eqref{eq:counting-function-bound}, this gives
+\[
+\mathcal N_A(X+Z_0)=O_{A,B}\left(\sqrt{\frac X Y}\right).
+\tag{9}\label{eq:N-XplusZ0-bound}
+\]
+
+Finally, on the smooth tail $t>T_*$,
+\[
+|f'(t)|\ll_B \frac{f(t)}t.
+\tag{10}\label{eq:f-derivative-bound}
+\]
+Indeed, if $t=\Phi(r)$, then $r=\psi(t)\ge N_0$ and $f(t)=1/r$, so
+\[
+f'(t)=-\frac1{r^2\Phi'(r)}.
+\]
+Now
+\[
+\Phi'(r)=\lambda r\frac{2H(\log r)-H'(\log r)}{H(\log r)^2}.
+\]
+Therefore
+\[
+|f'(t)|
+=
+\frac{H(\log r)^2}
+{\lambda r^3\bigl(2H(\log r)-H'(\log r)\bigr)}.
+\]
+Since
+\[
+H(w)\sim w,
+\qquad
+2H(w)-H'(w)\sim2w,
+\]
+and since the displayed bounds imposed when choosing $N_0$ apply with $x=r$ for every $r\ge
+N_0$, these comparisons hold with uniform upper and lower constants. Hence
+\[
+\Phi'(r)\asymp_B \frac r{H(\log r)},
+\]
+and the exact identity above gives
+\[
+|f'(t)|\asymp_B\frac{H(\log r)}{r^3}.
+\]
+On the other hand,
+\[
+t\asymp_B\frac{r^2}{H(\log r)},
+\qquad
+f(t)=\frac1r.
+\]
+Therefore
+\[
+|f'(t)|\ll_B\frac{f(t)}t.
+\]
+\begin{lemma}[Local comparability and Lipschitz control]
+For every fixed $c\in(0,1)$, there is a threshold $T(c)>T_*/c$ such that, whenever
+$t\ge T(c)$ and $ct\le s\le t$,
+\[
+f(s)\asymp_{B,c} f(t),
+\tag{11}\label{eq:local-comparability}
+\]
+and
+\[
+|f(s)-f(t)|\ll_{B,c}\frac{f(t)}t\,|t-s|.
+\tag{12}\label{eq:local-lipschitz}
+\]
+For fixed $c$, the implicit constants here depend only on $B$ and $c$, not on the later
+truncation parameters $U$ or $Q$.
+\end{lemma}
+
+\begin{proof}
+If $ct\le s\le t$, then
+\[
+\log s=\log t+O_c(1),
+\]
+so $s^{-1/2}\asymp_c t^{-1/2}$ and $\log s\asymp_c\log t$. Applying
+\eqref{eq:f-asymptotic} to both $s$ and $t$, after increasing $T(c)$ if necessary, gives
+\eqref{eq:local-comparability}. For $t\ge T(c)$, the full interval $[s,t]$ lies in the smooth
+tail $(T_*,\infty)$. If $\xi\in[s,t]$, then $ct\le \xi\le t$, so
+\eqref{eq:local-comparability}, applied with $\xi$ in place of $s$, gives
+\[
+f(\xi)\asymp_{B,c}f(t).
+\]
+By \eqref{eq:f-derivative-bound},
+\[
+|f'(\xi)|\ll_B \frac{f(\xi)}{\xi}
+\ll_{B,c}\frac{f(t)}t.
+\]
+The mean-value theorem now gives \eqref{eq:local-lipschitz}.
+\end{proof}
+
+\proofheading{3. Counting by tops}
+
+This section records the exact top-counting identity used in the contradiction.
+
+From now on, $X$ tends to infinity through positive integers in counting identities. The same
+symbol $X$ is also used as a real analytic parameter, for example as an endpoint of integration
+or as an argument of $\Phi$ and $\psi$.
+
+Let $X\to\infty$ through positive integers and put
+\[
+Y:=\log X,
+\qquad
+M:=\Phi(X).
+\]
+The quantity $M$ need not be an integer. Sums over $t\in A$ with $t\le M$ are sums over integer
+elements of $A$ bounded by the real number $M$. The analytic estimates are applied to the same
+integer values of $X$, with $X$ also used as a real parameter inside integrals. Throughout the
+remaining proof, $X$ is assumed large enough for every analytic interval whose nonemptiness is
+required to be nonempty and for all previously fixed thresholds to be exceeded. Discrete sets such
+as $A\cap(X+Z_0,M]$ may of course be empty and are handled separately.
+
+For all sufficiently large integer $X$, every $1\le n\le X$ has
+\[
+u(n)\le M.
+\]
+Indeed, for the finitely many $n<N_0$, each $u(n)$ is fixed and $M=\Phi(X)\to\infty$, so this
+holds once $X$ is large enough. For $n\ge N_0$, the assumed bound
+\eqref{eq:upper-bound-assumption} gives
+\[
+u(n)\le\Phi(n)\le\Phi(X)=M,
+\]
+because $n\le X$ and $\Phi$ is increasing on $[N_0,\infty)$.
+
+Also,
+\[
+M=\Phi(X)\asymp_B\frac{X^2}{Y},
+\]
+so $M>X+Z_0$ for all sufficiently large $X$, since $Z_0$ is fixed. Since every difference
+$1\le n\le X$ has top at most $M$, counting differences by their top gives the following exact
+identity.
+
+\begin{lemma}[Top-counting identity]
+For all sufficiently large integer $X$, the exact top-counting identity is
+\[
+X=
+\sum_{\substack{t\in A\\ t\le M}}
+\#\{b\in A:t-X\le b<t\}.
+\tag{13}\label{eq:top-counting-identity}
+\]
+\end{lemma}
+
+\begin{proof}
+Each $1\le n\le X$ contributes its unique representing pair
+\[
+n=u(n)-v(n),
+\]
+whose top satisfies $u(n)\le M$, so the map from counted pairs to their differences is
+surjective onto $\{1,2,\ldots,X\}$. Conversely, every counted pair $(t,b)$ gives a positive
+difference
+\[
+t-b\in[1,X].
+\]
+Uniqueness ensures that two counted pairs cannot give the same difference, so this map is
+injective on the counted pairs. Therefore the count is exactly $X$.
+\end{proof}
+
+No loss has been introduced in \eqref{eq:top-counting-identity}; all later inequalities enter
+only after splitting the exact count. We split the right-hand side according as $t\le X$ or
+$t>X$.
+
+\proofheading{4. Small tops}
+
+Since $M>X$, the portion of \eqref{eq:top-counting-identity} with $t\le X$ is exactly
+\[
+\binom{\mathcal N_A(X)}2.
+\]
+Each two-element subset of $A\cap[1,X]$ contributes exactly one ordered pair, with the larger
+element as top and the smaller element as bottom. Indeed, if $t\le X$, then every $b\in A$ with
+$b<t$ gives a difference
+\[
+1\le t-b\le X.
+\]
+Conversely, since $A\subseteq\N$, every such $b$ satisfies $b\ge1$; and since $t-X\le0$, the
+condition $t-X\le b<t$ in \eqref{eq:top-counting-identity} is automatic for every $b\in A$ with
+$b<t$. By \eqref{eq:counting-function-bound}, there is a fixed constant
+$C_{\rm sp}=C_{\rm sp}(A,B,N_0,T_*,Z_0)$ such that
+\[
+\mathcal N_A(X)\le F(X)+C_{\rm sp},
+\qquad
+F(X):=\int_0^X f(t)\,dt.
+\]
+The artificial extension of $f$ on $[0,T_*)$ changes $F(X)$ only by a fixed $O_{A,B}(1)$
+amount relative to the smooth tail. The discarded term in
+\[
+\binom{\mathcal N_A(X)}2=\frac12\mathcal N_A(X)^2-\frac12\mathcal N_A(X)
+\]
+is harmless at the present scale, because $\mathcal N_A(X)\le \mathcal N_A(X+Z_0)=O_{A,B}(\sqrt{X/Y})$ by
+\eqref{eq:N-XplusZ0-bound}, and
+\[
+\sqrt{X/Y}=o(X/Y).
+\]
+Therefore the cruder bound
+\[
+\binom{\mathcal N_A(X)}2
+\le
+\frac12\mathcal N_A(X)^2
+\le
+\frac12(F(X)+C_{\rm sp})^2
+\]
+is sharp enough for the second-order comparison.
+Expanding,
+\[
+\frac12(F(X)+C_{\rm sp})^2
+=
+\frac12 F(X)^2+O_{A,B}(F(X))+O_{A,B}(1).
+\]
+By \eqref{eq:f-integral-asymptotic},
+\[
+F(X)=2\sqrt{\frac{2\lambda X}{\log X}}+o\left(\sqrt{\frac X{\log X}}\right),
+\]
+and no second-order expansion of $F$ is needed. Hence
+\[
+O_{A,B}(F(X))+O_{A,B}(1)=o\left(\frac X{\log X}\right).
+\]
+Thus
+\[
+\binom{\mathcal N_A(X)}2
+\le
+\frac12\left(\int_0^X f(t)\,dt\right)^2
++
+o\left(\frac X Y\right).
+\tag{14}\label{eq:small-tops-bound}
+\]
+By \eqref{eq:f-integral-asymptotic},
+\[
+\frac12\left(\int_0^X f(t)\,dt\right)^2
+=
+\frac{4\lambda X}{Y}
++
+o\left(\frac X Y\right).
+\tag{15}\label{eq:small-top-asymptotic}
+\]
+
+\proofheading{5. Large tops and the integer floor}
+
+The only improvement over the continuous large-top majorant is that the integer count attached to
+a top $t$ is bounded by $\lfloor G_X(t)\rfloor$, not merely by $G_X(t)$.
+For $t\ge X$, define
+\[
+G_X(t):=\int_{t-X}^t f(s)\,ds.
+\]
+Since $f$ is nonincreasing, $G_X$ is also nonincreasing. Indeed, for $h>0$,
+\[
+G_X(t+h)
+=
+\int_{t-X}^t f(s+h)\,ds
+\le
+\int_{t-X}^t f(s)\,ds
+=
+G_X(t).
+\]
+Hence $\lfloor G_X(t)\rfloor$ is also nonincreasing. Since $G_X$ is monotone, it is measurable,
+and therefore $\lfloor G_X\rfloor$ is measurable. On each compact interval $[X,M]$,
+\[
+0\le G_X(t)\le \int_0^X f(s)\,ds,
+\]
+because $t-X\ge0$ and $f$ is nonincreasing. Thus $G_X(t)$ is finite for every $t\in[X,M]$,
+$\lfloor G_X\rfloor$ is bounded on $[X,M]$, and $f(t)\lfloor G_X(t)\rfloor$ is measurable and
+integrable there.
+
+Fix $t\in A$ with
+\[
+t>X+Z_0.
+\]
+Let
+\[
+r_t:=\#\{b\in A:t-X\le b<t\}.
+\]
+If $r_t=0$, then $r_t\le\lfloor G_X(t)\rfloor$ is trivial because $G_X(t)\ge0$. Assume
+$r_t\ge1$, and list the contributing bottoms as
+\[
+b_1<b_2<\cdots<b_{r_t}<t,
+\]
+with
+\[
+b_i\in A,
+\qquad
+ t-X\le b_i<t.
+\]
+Because $t>X+Z_0$, each $b_i$ satisfies
+\[
+b_i\ge t-X>Z_0.
+\]
+Set $b_{r_t+1}:=t$. Then
+\[
+b_1<b_2<\cdots<b_{r_t}<b_{r_t+1}=t
+\]
+has exactly $r_t$ gaps, including the final gap ending at $t$. For every $1\le i\le r_t$, the
+upper endpoint $b_{i+1}$ exceeds $Z_0$, so
+\eqref{eq:gap-integral} applies to the gap $[b_i,b_{i+1}]$. Hence
+\[
+r_t
+\le
+\sum_{i=1}^{r_t}\int_{b_i}^{b_{i+1}} f(s)\,ds
+=
+\int_{b_1}^t f(s)\,ds
+\le
+\int_{t-X}^t f(s)\,ds
+=
+G_X(t).
+\]
+The quantity $G_X(t)$ is nonnegative, and $r_t$ is an integer. Hence the inequality $r_t\le
+G_X(t)$ implies
+\[
+r_t\le \lfloor G_X(t)\rfloor.
+\tag{16}\label{eq:floor-top-bound}
+\]
+
+Let
+\[
+t_1<t_2<\cdots<t_L
+\]
+be the elements of $A\cap(X+Z_0,M]$. If $L=0$, there is no contribution from this range. Assume
+$L\ge1$. For $j\ge2$, the elements $t_{j-1}$ and $t_j$ are elements of $A$ with $t_{j-1}<t_j$
+and
+\[
+t_j>X+Z_0>Z_0.
+\]
+The spacing estimate \eqref{eq:gap-integral}, which only requires two elements $y<z$ of $A$
+with $z>Z_0$, therefore applies to the gap $[t_{j-1},t_j]$.
+
+The next step converts the discrete sum over large tops into a gap-integral sum, losing only
+the first large top. Because $\lfloor G_X(t)\rfloor$ is nonincreasing,
+\[
+\int_{t_{j-1}}^{t_j}
+ f(s)\lfloor G_X(s)\rfloor\,ds
+\ge
+\lfloor G_X(t_j)\rfloor
+\int_{t_{j-1}}^{t_j}f(s)\,ds
+\ge
+\lfloor G_X(t_j)\rfloor.
+\]
+Therefore, if $L\ge2$,
+\[
+\sum_{j=2}^L\lfloor G_X(t_j)\rfloor
+\le
+\int_{t_1}^{t_L} f(t)\lfloor G_X(t)\rfloor\,dt
+\le
+\int_X^M f(t)\lfloor G_X(t)\rfloor\,dt.
+\]
+Here extending the integral to all of $[X,M]$ is legitimate because
+\[
+f(t)\lfloor G_X(t)\rfloor\ge0.
+\]
+The first top $t_1$ is the only possible loss in this integral domination. Adding this
+first-top loss gives
+\[
+\sum_{j=1}^L\lfloor G_X(t_j)\rfloor
+\le
+\lfloor G_X(t_1)\rfloor
++
+\int_X^M f(t)\lfloor G_X(t)\rfloor\,dt.
+\tag{17}\label{eq:integral-domination}
+\]
+For $L=1$, the same inequality is immediate because the integral term is nonnegative. Thus
+\eqref{eq:integral-domination} holds for all $L\ge1$.
+
+The endpoint term is negligible. Since $t_1>X$,
+\[
+\lfloor G_X(t_1)\rfloor
+\le
+G_X(t_1)
+=
+\int_{t_1-X}^{t_1}f(s)\,ds.
+\]
+Here $t_1-X>0$. Among intervals of length $X$ in $[0,\infty)$, the integral of a nonincreasing
+function is maximized by $[0,X]$. Indeed, for $a\ge0$,
+\[
+\int_a^{a+X}f(s)\,ds
+=
+\int_0^X f(u+a)\,du
+\le
+\int_0^X f(u)\,du.
+\]
+Therefore, by \eqref{eq:f-integral-asymptotic},
+\[
+G_X(t_1)
+\le
+\int_0^X f(s)\,ds
+=
+O_{A,B}\left(\sqrt{\frac X Y}\right)
+=
+o\left(\frac X Y\right).
+\tag{18}\label{eq:endpoint-loss}
+\]
+Consequently, if $L=0$, the estimate below is immediate because the left side is zero and the
+integral is nonnegative. If $L\ge1$, \eqref{eq:floor-top-bound},
+\eqref{eq:integral-domination}, and \eqref{eq:endpoint-loss} give the same estimate. Hence, in all
+cases,
+\[
+\sum_{t\in A\cap(X+Z_0,M]} r_t
+\le
+\int_X^M f(t)\lfloor G_X(t)\rfloor\,dt
++
+o\left(\frac X Y\right).
+\]
+
+The integer tops in the short interval $X<t\le X+Z_0$ also contribute only $o(X/Y)$. Indeed,
+since $A\subseteq\N$ and $X$ and $Z_0$ are integers, the interval $(X,X+Z_0]\cap\N$ contains at
+most $Z_0$ possible integer tops. This is the only use of the integrality of $Z_0$. Each such top has at most
+$\mathcal N_A(X+Z_0)$ possible bottoms. By \eqref{eq:N-XplusZ0-bound}, the total contribution from these tops is
+at most
+\[
+Z_0\mathcal N_A(X+Z_0)
+=O_{A,B}\left(\sqrt{\frac X Y}\right)
+=o\left(\frac X Y\right).
+\]
+Combining \eqref{eq:top-counting-identity}, \eqref{eq:small-tops-bound}, and the preceding
+large-top bounds, we get
+\[
+X
+\le
+\frac12\left(\int_0^X f(t)\,dt\right)^2
++
+\int_X^M f(t)\lfloor G_X(t)\rfloor\,dt
++
+o\left(\frac X Y\right).
+\tag{19}\label{eq:fundamental-upper-bound}
+\]
+It remains to evaluate the right-hand side sharply.
+
+\proofheading{6. The continuous majorant without the floor}
+
+Throughout parts 6 through 8,
+\[
+Y=\log X,
+\]
+with $X\to\infty$ through positive integers. Also $M=\Phi(X)$; as observed above,
+$M\asymp_B X^2/Y>X$ for all sufficiently large $X$. Later $t=\Phi(r)$, $r=\psi(t)$, and
+$q=X/r$, while $U$ and $Q$ are fixed real truncation parameters before the limit
+$X\to\infty$ is taken. The lower-endpoint expansion feeds both the square term and the
+large-$q$ floor tail; local Lipschitz control feeds the correction-tail estimate; and the
+floor-saving main term uses the fixed-$Q$ change of variables together with
+$G_X(\Phi(X/q))=q+o(1)$ uniformly on fixed $q$-ranges. For tail estimates below that are later
+used after a truncation parameter is sent to infinity, implicit constants are independent of that
+truncation parameter, while lower $X$-thresholds may depend on its fixed value. Dependence on a
+fixed truncation parameter is displayed in subscripts such as $o_{A,B,U}$ or $o_{A,B,Q}$.
+Define
+\[
+J_B(X)
+:=
+\frac12\left(\int_0^X f(t)\,dt\right)^2
++
+\int_X^M f(t)G_X(t)\,dt.
+\]
+We prove
+\[
+J_B(X)
+=
+X+
+\frac{\lambda\bigl(3-2B-2\log(\log 2)\bigr)X}{Y}
++
+o\left(\frac X Y\right).
+\tag{20}\label{eq:continuous-majorant-asymptotic}
+\]
+The proof of this asymptotic is split into the square term, the correction term on a fixed
+truncation range, and a correction-tail estimate whose normalized constant is independent of the
+truncation parameter.
+
+The small-top term is already known from \eqref{eq:small-top-asymptotic}:
+\[
+\frac12\left(\int_0^X f(t)\,dt\right)^2
+=
+\frac{4\lambda X}{Y}
++
+o\left(\frac X Y\right).
+\tag{21}\label{eq:small-top-asymptotic-restated}
+\]
+Next,
+\[
+\int_X^M f(t)G_X(t)\,dt
+=
+X\int_X^M f(t)^2\,dt
++
+R(X),
+\tag{22}\label{eq:square-correction-split}
+\]
+where
+\[
+R(X):=
+\int_X^M
+f(t)\int_{t-X}^t\bigl(f(s)-f(t)\bigr)\,ds\,dt.
+\]
+Because $f$ is nonincreasing and $s\le t$ inside the inner integral, $R(X)\ge0$.
+
+\proofsubheading{6.1. The square term and constant computation}
+
+\begin{lemma}[Lower endpoint expansion]
+As $X\to\infty$ through positive integers, let
+\[
+r_0=r_0(X):=\psi(X),
+\qquad
+w_0=w_0(X):=\log r_0.
+\]
+Then
+\[
+w_0=
+\frac Y2+\frac12\log Y-\frac12\log(2\lambda)+o(1).
+\tag{23}\label{eq:lower-endpoint-asymptotic}
+\]
+Equivalently,
+\[
+r_0=\psi(X)=\sqrt{\frac{XY}{2\lambda}}\,(1+o(1)).
+\]
+Consequently, for every fixed $Q>1$,
+\[
+r_0=\psi(X)=o(X/Q).
+\]
+\end{lemma}
+
+\begin{proof}
+For all sufficiently large $X$, we have $X>T_*$, so $r_0=\psi(X)$ is evaluated on the fixed
+inverse branch. The defining identity is
+\[
+\Phi(e^{w_0})=\Phi(r_0)=X=e^Y,
+\]
+or equivalently
+\[
+X=\lambda\frac{e^{2w_0}}{H(w_0)}.
+\]
+Thus
+\[
+2w_0=Y+\log H(w_0)-\log\lambda.
+\]
+Since $X\to\infty$ and $\Phi(e^w)\to\infty$ on the chosen tail, we have $w_0\to\infty$. Also,
+$H(w)=w+O_B(\log w)$, so $\log H(w_0)=o(w_0)$. The identity above gives $Y=2w_0+o(w_0)$, and
+hence
+\[
+w_0\sim\frac Y2.
+\]
+Consequently,
+\[
+\log H(w_0)=O_B(\log Y),
+\]
+and the preceding identity improves to
+\[
+w_0=\frac Y2+O_B(\log Y).
+\]
+Therefore
+\[
+H(w_0)=\frac Y2+O_B(\log Y),
+\]
+and so
+\[
+\log H(w_0)=\log Y-\log 2+o(1).
+\]
+The fixed constant $B$ enters only inside the $O_B(\log Y)$ term before this logarithm; after the
+logarithm it contributes no constant term. Substituting the last estimate into
+\[
+2w_0=Y+\log H(w_0)-\log\lambda
+\]
+gives \eqref{eq:lower-endpoint-asymptotic}. Exponentiating also gives the explicit endpoint
+asymptotic
+\[
+r_0=\psi(X)=\sqrt{\frac{XY}{2\lambda}}\,(1+o(1)).
+\]
+For fixed $Q$, the stated consequence follows because
+\[
+\frac{r_0}{X/Q}
+=
+Q\sqrt{\frac{Y}{2\lambda X}}\,(1+o(1))\to0.
+\]
+\end{proof}
+
+\begin{lemma}[Square-term asymptotic and constant computation]
+As $X\to\infty$ through positive integers,
+\[
+X\int_X^M f(t)^2\,dt
+=
+X+
+\frac{\lambda\bigl(1-2B+2\log(\lambda/2)\bigr)X}{Y}
++
+o\left(\frac X Y\right).
+\]
+\end{lemma}
+
+\begin{proof}
+This is where the $1/Y$ constant in the continuous majorant is determined.
+
+As observed in Section 3, $M=\Phi(X)\asymp_B X^2/Y$, so $M>X$ for all sufficiently large $X$.
+For all sufficiently large $X$, we also have $X>T_*$ and $X\ge N_0$. Hence $\psi(X)\ge N_0$, and
+throughout the range $X\le t\le M$, every argument of $\psi$ lies on the inverse
+$\psi:[T_*,\infty)\to[N_0,\infty)$ of
+$\Phi:[N_0,\infty)\to[T_*,\infty)$. This is the only branch used in all changes of variables
+below.
+
+Use the change of variables
+\[
+t=\Phi(e^w)=\lambda\frac{e^{2w}}{H(w)}.
+\]
+Then
+\[
+\psi(t)=e^w,
+\qquad
+f(t)=e^{-w}.
+\]
+Also,
+\[
+dt=\lambda e^{2w}\left(\frac2{H(w)}-\frac{H'(w)}{H(w)^2}\right)\,dw.
+\]
+Therefore
+\[
+f(t)^2\,dt
+=
+\lambda\left(\frac2{H(w)}-\frac{H'(w)}{H(w)^2}\right)\,dw.
+\tag{24}\label{eq:square-change-differential}
+\]
+The lower endpoint $t=X$ corresponds to $w=w_0=\log\psi(X)$. The upper endpoint satisfies
+$M=\Phi(X)=\Phi(e^Y)$, so under $t=\Phi(e^w)$ it corresponds to $e^w=X$, hence to $w=Y$. By
+\eqref{eq:lower-endpoint-asymptotic}, $w_0<Y$ for all sufficiently large $X$, so the interval
+$[w_0,Y]$ is ordered as written. Since
+\[
+\left(\frac1{H(w)}\right)'=-\frac{H'(w)}{H(w)^2},
+\]
+\eqref{eq:square-change-differential} gives
+\[
+\int_X^M f(t)^2\,dt
+=
+\lambda\left[
+2\int_{w_0}^Y\frac{dw}{H(w)}
++
+\frac1{H(Y)}-
+\frac1{H(w_0)}
+\right].
+\tag{25}\label{eq:square-integral-exact}
+\]
+The estimate \eqref{eq:lower-endpoint-asymptotic} gives $w_0\sim Y/2$. Hence the interval
+$[w_0,Y]$ has length $O_B(Y)$, and uniformly for $w\in[w_0,Y]$, we have $w\asymp Y$. Also,
+\[
+H(w)=w\left(1-\frac{\log w-B}{w}\right).
+\]
+Since
+\[
+\frac{\log w-B}{w}=O_B\left(\frac{\log Y}{Y}\right)
+\]
+uniformly on $[w_0,Y]$, after increasing the lower threshold in $X$ we may assume
+\[
+\left|\frac{\log w-B}{w}\right|\le \frac12
+\qquad(w\in[w_0,Y]).
+\]
+The geometric expansion gives
+\[
+\frac1{H(w)}
+=
+\frac1w+
+\frac{\log w-B}{w^2}
++
+O_B\left(\frac{(\log Y)^2}{Y^3}\right).
+\tag{26}\label{eq:H-inverse-expansion}
+\]
+The error term in \eqref{eq:H-inverse-expansion}, integrated over an interval of length $O_B(Y)$,
+contributes
+\[
+O_B\left(\frac{(\log Y)^2}{Y^2}\right)=o\left(\frac1Y\right).
+\]
+Write
+\[
+w_0=\frac Y2+r_X.
+\]
+By \eqref{eq:lower-endpoint-asymptotic},
+\[
+r_X=
+\frac12\log Y-\frac12\log(2\lambda)+o(1).
+\tag{27}\label{eq:rX-asymptotic}
+\]
+This moving lower endpoint is the source of the $-2\log Y$ contribution that cancels the later
+$+2\log Y$ term in the square-term constant computation.
+Since $r_X=O_B(\log Y)$,
+\[
+w_0=\frac Y2\left(1+\frac{2r_X}{Y}\right),
+\qquad
+\frac{r_X^2}{Y^2}=O\left(\frac{(\log Y)^2}{Y^2}\right)=o\left(\frac1Y\right).
+\]
+Therefore Taylor expansion of $\log(1+2r_X/Y)$ gives
+\[
+\log w_0=
+\log\frac Y2+
+\frac{2r_X}{Y}+
+o\left(\frac1Y\right),
+\]
+and hence
+\[
+2\int_{w_0}^Y\frac{dw}{w}
+=
+2\log 2-
+\frac{4r_X}{Y}+
+o\left(\frac1Y\right).
+\]
+Also,
+\[
+\int \frac{\log w-B}{w^2}\,dw
+=
+-\frac{\log w+1-B}{w}.
+\]
+Thus
+\[
+2\int_{w_0}^Y\frac{\log w-B}{w^2}\,dw
+=
+2\left[
+-\frac{\log Y+1-B}{Y}
++
+\frac{\log w_0+1-B}{w_0}
+\right].
+\]
+Using $w_0=Y/2+r_X$ and $r_X=O_B(\log Y)$, the errors caused by $r_X$ in the denominator and
+logarithm are
+\[
+O\left(\frac{(\log Y)^2}{Y^2}\right)=o\left(\frac1Y\right).
+\]
+Therefore
+\[
+\frac{\log w_0+1-B}{w_0}
+=
+\frac{2(\log Y-\log 2+1-B)}{Y}
++
+o\left(\frac1Y\right).
+\]
+Hence
+\[
+2\int_{w_0}^Y\frac{\log w-B}{w^2}\,dw
+=
+\frac{2\log Y-4\log 2+2-2B}{Y}
++
+o\left(\frac1Y\right).
+\]
+Finally,
+\[
+H(Y)=Y+O_B(\log Y),
+\qquad
+H(w_0)=\frac Y2+O(\log Y).
+\]
+Thus
+\[
+\frac1{H(Y)}=\frac1Y+O\left(\frac{\log Y}{Y^2}\right),
+\qquad
+\frac1{H(w_0)}=\frac2Y+O\left(\frac{\log Y}{Y^2}\right).
+\]
+Hence
+\[
+\frac1{H(Y)}-
+\frac1{H(w_0)}
+=
+-\frac1Y+
+o\left(\frac1Y\right).
+\tag{28}\label{eq:endpoint-denominator-difference}
+\]
+\noindent\textit{Square-term estimate.} Combining \eqref{eq:square-integral-exact} through
+\eqref{eq:endpoint-denominator-difference}, the three numerators of the $1/Y$ contributions inside
+the square brackets, before substituting
+the asymptotic for $r_X$, are respectively
+\[
+\begin{aligned}
+2\int_{w_0}^Y \frac{dw}{w} &: -4r_X,\\
+2\int_{w_0}^Y \frac{\log w-B}{w^2}\,dw
+&: 2\log Y-4\log 2+2-2B,\\
+\frac1{H(Y)}-\frac1{H(w_0)} &: -1.
+\end{aligned}
+\]
+Equivalently, \eqref{eq:rX-asymptotic} gives
+\[
+-4r_X=-2\log Y+2\log(2\lambda)+o(1),
+\]
+which is the term cancelling the positive $2\log Y$ contribution below. Therefore, after using
+\eqref{eq:rX-asymptotic}, the resulting coefficient is
+\[
+\begin{aligned}
+&\bigl(-4r_X\bigr)
+ +\bigl(2\log Y-4\log 2+2-2B\bigr)-1 \\
+&=\bigl(-2\log Y+2\log(2\lambda)\bigr)
+  +\bigl(2\log Y-4\log 2+2-2B\bigr)-1+o(1) \\
+&=1-2B+2\log(2\lambda)-4\log 2+o(1) \\
+&=1-2B+2\log(\lambda/2)+o(1).
+\end{aligned}
+\]
+Thus the logarithmic terms cancel explicitly; the last line uses
+$2\log(2\lambda)-4\log 2=2\log(\lambda/2)$. Also
+$2\lambda\log 2=1$ and $\lambda/2=(4\log 2)^{-1}$. We obtain
+\[
+\int_X^M f(t)^2\,dt
+=
+\lambda\left[
+2\log 2+
+\frac{1-2B+2\log(\lambda/2)}{Y}
+\right]
++
+o\left(\frac1Y\right).
+\]
+Since $2\lambda\log 2=1$, this becomes
+\[
+\int_X^M f(t)^2\,dt
+=
+1+
+\frac{\lambda\bigl(1-2B+2\log(\lambda/2)\bigr)}{Y}
++
+o\left(\frac1Y\right).
+\]
+Thus
+\[
+\begin{aligned}
+X\int_X^M f(t)^2\,dt
+&=
+X+
+\frac{\lambda\bigl(1-2B+2\log(\lambda/2)\bigr)X}{Y}
++
+o\left(\frac X Y\right).
+\end{aligned}
+\tag{29}\label{eq:square-term-asymptotic}
+\]
+This is the square-term asymptotic used in the final coefficient comparison.
+
+\noindent\textit{Square-term constant computation.} In the bracket in
+\eqref{eq:square-integral-exact}, the only $1/Y$-scale contributions are
+\[
+\begin{aligned}
+\text{lower-endpoint displacement} &: \quad -4r_X,\\
+\text{integral of }(\log w-B)/w^2 &: \quad 2\log Y-4\log 2+2-2B,\\
+\text{endpoint denominator difference} &: \quad -1.
+\end{aligned}
+\]
+Using $r_X=\frac12\log Y-\frac12\log(2\lambda)+o(1)$, these add to
+\[
+1-2B+2\log(\lambda/2)+o(1),
+\]
+which is the coefficient in \eqref{eq:square-term-asymptotic}. No $1/Y$-scale term is
+left in the error: the integrated remainder in \eqref{eq:H-inverse-expansion}, the
+$r_X$-dependent denominator and logarithm errors, and the endpoint expansion errors are all
+$o(1/Y)$ before multiplication by $X$.
+\end{proof}
+
+\proofsubheading{6.2. The correction term}
+
+\proofsubheading{\texorpdfstring{$L^1$}{L1} rescaling lemma}
+
+\begin{lemma}[\texorpdfstring{$L^1$}{L1} rescaling]
+Define
+\[
+g_X(v):=\sqrt{\frac{XY}{2\lambda}}\,f(Xv)
+\qquad(v>0).
+\]
+The value at $v=0$ is irrelevant to all integrals below. For every fixed real $U>0$,
+\[
+g_X\to \bigl(v\mapsto v^{-1/2}\bigr)
+\qquad\text{in }L^1((0,U)).
+\tag{30}\label{eq:gX-L1-convergence}
+\]
+\end{lemma}
+
+\begin{proof}
+Fix $0<\varepsilon<\min\{U,1\}$. The parameter $\varepsilon$ is fixed before the limit
+$X\to\infty$ is taken; only after the limsup estimate is obtained do we let
+$\varepsilon\downarrow0$. The convergence is uniform on every interval $[\varepsilon,U]$,
+by \eqref{eq:f-asymptotic}. On $(0,\varepsilon)$,
+\[
+\int_0^\varepsilon g_X(v)\,dv
+=
+\sqrt{\frac{Y}{2\lambda X}}
+\int_0^{\varepsilon X} f(s)\,ds.
+\]
+Choose a fixed $T_1\ge T_*$ large enough for \eqref{eq:f-upper-bound} and
+\eqref{eq:elementary-integral-bound} to hold on $[T_1,\infty)$. The compact initial part
+contributes
+\[
+\sqrt{\frac{Y}{2\lambda X}}
+\int_0^{T_1} f(s)\,ds
+=
+O_{A,B}\left(\sqrt{\frac YX}\right)=o(1).
+\]
+For each fixed $\varepsilon>0$ and all sufficiently large $X$, say with $\varepsilon X\ge T_1$,
+the remaining part satisfies, by \eqref{eq:f-upper-bound} and
+\eqref{eq:elementary-integral-bound},
+\[
+\int_{T_1}^{\varepsilon X} f(s)\,ds
+\ll_B
+\int_{T_1}^{\varepsilon X}\frac{ds}{\sqrt{s\log s}}
+\ll_B
+\sqrt{\frac{\varepsilon X}{\log(\varepsilon X)}}.
+\]
+Consequently,
+\[
+\int_0^{\varepsilon X} f(s)\,ds
+\ll_{A,B}
+1+
+\sqrt{\frac{\varepsilon X}{\log(\varepsilon X)}}.
+\]
+For fixed $\varepsilon>0$ and all sufficiently large $X$ depending on this fixed $\varepsilon$,
+\[
+\log(\varepsilon X)=Y+\log\varepsilon,
+\qquad
+\limsup_{X\to\infty}\sqrt{\frac{Y}{\log(\varepsilon X)}}=1.
+\]
+Thus, for fixed $0<\varepsilon\le \min\{U,1\}$, taking $X\to\infty$ first with a post-limsup
+constant independent of both $\varepsilon$ and $U$ gives the small-$v$ uniform-integrability
+estimate
+\[
+\limsup_{X\to\infty}
+\int_0^\varepsilon g_X(v)\,dv
+\le
+C_{A,B}\sqrt\varepsilon.
+\]
+Together with
+\[
+\int_0^\varepsilon v^{-1/2}\,dv=2\sqrt\varepsilon,
+\]
+this yields
+\[
+\limsup_{X\to\infty}
+\int_0^\varepsilon |g_X(v)-v^{-1/2}|\,dv
+\ll_{A,B}
+\sqrt\varepsilon,
+\]
+where the implicit constant is independent of $0<\varepsilon\le \min\{U,1\}$. The threshold in
+$X$ may depend on the fixed value of $\varepsilon$; only afterward do we let
+$\varepsilon\downarrow0$.
+
+Combining this with uniform convergence on $[\varepsilon,U]$, we have
+\[
+\limsup_{X\to\infty}
+\|g_X-v^{-1/2}\|_{L^1(0,U)}
+\le
+C_{A,B}\sqrt\varepsilon
++
+\limsup_{X\to\infty}
+\|g_X-v^{-1/2}\|_{L^1(\varepsilon,U)}.
+\]
+The second term is $0$, and then letting $\varepsilon\downarrow0$ proves
+\eqref{eq:gX-L1-convergence}.
+\end{proof}
+
+\proofsubheading{Truncated correction term}
+
+In this subsection the order of limits is fixed: first fix $U\ge2$, then let $X\to\infty$,
+and only after the normalized estimates are obtained let $U\to\infty$. The parameter $U$ never
+depends on $X$.
+
+Fix a real number $U\ge2$, and define
+\[
+R_U(X)
+:=
+\int_X^{UX}
+ f(t)\int_{t-X}^t\bigl(f(s)-f(t)\bigr)\,ds\,dt.
+\]
+Here $U$ is fixed as $X\to\infty$. For fixed $U$, one has $UX<M$ for all sufficiently large
+$X$, because
+\[
+\frac{M}{UX}\asymp_{B,U}\frac{X}{Y}\to\infty.
+\]
+Let
+\[
+h(u):=2\left(1-\sqrt{1-\frac1u}\right)-\frac1u
+\qquad(u\ge1).
+\]
+With
+\[
+t=X\alpha,
+\qquad
+s=X\beta,
+\]
+we get
+\[
+\frac{Y}{2\lambda X}R_U(X)
+=
+\int_1^U
+ g_X(\alpha)\int_{\alpha-1}^{\alpha}
+ \bigl(g_X(\beta)-g_X(\alpha)\bigr)\,d\beta\,d\alpha.
+\]
+On $[1,U]$, $g_X(\alpha)\to \alpha^{-1/2}$ uniformly, again by \eqref{eq:f-asymptotic}, and the
+functions $g_X$ are uniformly bounded there for all sufficiently large $X$. Also,
+\[
+\beta^{-1/2}\in L^1(0,U).
+\]
+Define
+\[
+K(\varphi)(\alpha):=\int_{\alpha-1}^{\alpha} \varphi(\beta)\,d\beta.
+\]
+Endpoint values are irrelevant for these Lebesgue integrals; in particular the integrable
+singularity of $\beta^{-1/2}$ at $\beta=0$ causes no ambiguity at $\alpha=1$.
+Then
+\[
+\|K(\varphi)\|_{L^\infty(1,U)}
+\le
+\|\varphi\|_{L^1(0,U)}.
+\]
+By \eqref{eq:gX-L1-convergence},
+\[
+K(g_X)\to K(\beta^{-1/2})
+\]
+uniformly on $[1,U]$. Moreover, $K(\beta^{-1/2})(\alpha)$ is finite and continuous on $[1,U]$.
+The $L^1(0,U)$ convergence also gives $\|g_X\|_{L^1(0,U)}=O_{A,B,U}(1)$, so $K(g_X)$ is uniformly
+bounded on $[1,U]$; and $g_X$ is uniformly bounded on $[1,U]$ for all sufficiently large $X$.
+Writing $g(\alpha)=\alpha^{-1/2}$, for $\alpha\in[1,U]$ we have
+\[
+\begin{aligned}
+&|g_X(\alpha)K(g_X)(\alpha)-g(\alpha)K(g)(\alpha)|
+\\
+&\le
+\|g_X-g\|_{L^\infty(1,U)}\|K(g_X)\|_{L^\infty(1,U)}
+\\
+&\quad+
+\|g\|_{L^\infty(1,U)}\|K(g_X)-K(g)\|_{L^\infty(1,U)},
+\end{aligned}
+\]
+and
+\[
+|g_X(\alpha)^2-g(\alpha)^2|
+\le
+(\|g_X\|_{L^\infty(1,U)}+\|g\|_{L^\infty(1,U)})
+\|g_X-g\|_{L^\infty(1,U)}.
+\]
+Both right-hand sides tend to $0$. Hence
+\[
+g_X(\alpha)K(g_X)(\alpha)-g_X(\alpha)^2
+\to
+\alpha^{-1/2}K(\beta^{-1/2})(\alpha)-\alpha^{-1}
+\]
+uniformly on $[1,U]$, and therefore in $L^1(1,U)$. Consequently,
+\[
+\frac{Y}{2\lambda X}R_U(X)
+\to
+\int_1^U
+\left[
+ \alpha^{-1/2}\int_{\alpha-1}^{\alpha} \beta^{-1/2}\,d\beta
+-
+\frac1\alpha
+\right]d\alpha.
+\]
+Since
+\[
+\alpha^{-1/2}\int_{\alpha-1}^{\alpha} \beta^{-1/2}\,d\beta
+=
+2\left(1-\sqrt{1-\frac1\alpha}\right),
+\]
+we get
+\[
+R_U(X)
+=
+\frac{2\lambda X}{Y}
+\int_1^U
+\left[
+2\left(1-\sqrt{1-\frac1\alpha}\right)-\frac1\alpha
+\right]d\alpha
++
+o_{A,B,U}\left(\frac X Y\right).
+\tag{31}\label{eq:RU-limit}
+\]
+The limiting integrand is $h(\alpha)$, and
+\[
+h(\alpha)
+=
+\frac1{4\alpha^2}+O\left(\frac1{\alpha^3}\right)
+\qquad(\alpha\to\infty).
+\]
+At $\alpha=1$ it equals $1$, and it is continuous on $[1,2]$. Hence the corresponding improper
+integral converges absolutely.
+
+\proofsubheading{Correction-tail estimate with truncation-independent constant}
+
+\begin{lemma}[Correction-tail estimate]
+For every fixed real $U\ge2$,
+\[
+0\le R(X)-R_U(X)\ll_B\frac{X}{UY},
+\tag{32}\label{eq:R-tail-bound}
+\]
+where the implicit constant is independent of $U$, while the lower threshold for $X$ may depend
+on the fixed value of $U$. Consequently,
+\[
+\lim_{U\to\infty}\limsup_{X\to\infty}
+\frac{Y}{2\lambda X}\bigl(R(X)-R_U(X)\bigr)=0.
+\]
+\end{lemma}
+
+\begin{proof}
+Take a fixed real number $U\ge2$. For fixed $U$, all sufficiently large $X$ satisfy $UX<M$.
+If $t\ge UX$ and $s\in[t-X,t]$, then
+\[
+s\in[t/2,t].
+\]
+For sufficiently large $X$, this interval lies in the smooth tail $(T_*,\infty)$. The lower
+threshold for $X$ in this paragraph may depend on the fixed value of $U$, but the constant in
+\eqref{eq:local-lipschitz} with $c=1/2$ depends only on $B$. Applying
+\eqref{eq:local-lipschitz} with $c=1/2$, we get
+\[
+0\le f(s)-f(t)
+\ll_B
+\frac{f(t)}t(t-s).
+\]
+Therefore
+\[
+\int_{t-X}^t\bigl(f(s)-f(t)\bigr)\,ds
+\ll_B
+\frac{f(t)X^2}{t}.
+\]
+Hence
+\[
+0\le R(X)-R_U(X)
+\ll_B
+X^2\int_{UX}^M\frac{f(t)^2}{t}\,dt.
+\]
+By \eqref{eq:f-asymptotic},
+\[
+f(t)^2\ll_B\frac1{t\log t},
+\]
+and for $t\ge UX$ with $U\ge2$ we have $\log t\ge\log(UX)\ge Y$. Thus, enlarging the
+upper limit to infinity, uniformly in $U\ge2$ in the constant, and with only the lower threshold
+in $X$ allowed to depend on the fixed $U$,
+\[
+R(X)-R_U(X)
+\ll_B
+X^2\int_{UX}^{\infty}\frac{dt}{t^2\log t}.
+\]
+Moreover,
+\[
+\int_{UX}^{\infty}\frac{dt}{t^2\log t}
+\le
+\frac1Y\int_{UX}^{\infty}\frac{dt}{t^2}
+=
+\frac1{UXY}.
+\]
+Therefore
+\[
+R(X)-R_U(X)
+\ll_B
+\frac{X}{UY}.
+\]
+This proves \eqref{eq:R-tail-bound}. Equivalently, for every fixed $U\ge2$,
+\[
+\limsup_{X\to\infty}
+\frac{Y}{2\lambda X}\bigl(R(X)-R_U(X)\bigr)
+\le
+\frac{C_B}{U},
+\]
+where the constant is independent of $U$. Hence
+\[
+\lim_{U\to\infty}\limsup_{X\to\infty}
+\frac{Y}{2\lambda X}\bigl(R(X)-R_U(X)\bigr)=0.
+\]
+Here the threshold for $X$ may depend on the fixed value of $U$, while the implicit constant in
+\eqref{eq:R-tail-bound} does not.
+\end{proof}
+
+From \eqref{eq:RU-limit} and the preceding tail estimate, for every fixed $U\ge2$,
+\[
+\limsup_{X\to\infty}
+\left|
+\frac{Y}{2\lambda X}R(X)
+-
+\int_1^\infty h(u)\,du
+\right|
+\le
+\frac{C_B}{U}
++
+\int_U^\infty |h(u)|\,du.
+\]
+Here we used $R(X)-R_U(X)\ge0$ and the normalized tail bound
+\eqref{eq:R-tail-bound}; no sign information on $h$ is needed because
+$\int_U^\infty |h(u)|\,du\to0$. Since $h(u)=O(u^{-2})$, the right-hand side tends to $0$
+as $U\to\infty$. Therefore
+\[
+R(X)
+=
+\frac{2\lambda X}{Y}
+\int_1^\infty
+\left[
+2\left(1-\sqrt{1-\frac1u}\right)-\frac1u
+\right]du
++
+o\left(\frac X Y\right).
+\]
+With
+\[
+z=\sqrt{1-\frac1u},
+\]
+one has
+\[
+u=\frac1{1-z^2},
+\qquad
+ du=\frac{2z}{(1-z^2)^2}\,dz.
+\]
+Moreover,
+\[
+h(u)\,du=(1-z)^2\frac{2z}{(1-z^2)^2}\,dz=\frac{2z}{(1+z)^2}\,dz.
+\]
+The integral becomes
+\[
+\int_0^1\frac{2z}{(1+z)^2}\,dz.
+\]
+Since
+\[
+\int\frac{2z}{(1+z)^2}\,dz
+=
+2\log(1+z)+\frac{2}{1+z},
+\]
+evaluation at $0$ and $1$ gives
+\[
+\int_0^1\frac{2z}{(1+z)^2}\,dz=2\log 2-1.
+\]
+Therefore
+\[
+R(X)
+=
+\frac{2\lambda(2\log 2-1)X}{Y}
++
+o\left(\frac X Y\right).
+\tag{33}\label{eq:R-asymptotic}
+\]
+
+\proofsubheading{6.3. Assembling \texorpdfstring{$J_B(X)$}{J-B(X)}}
+
+The continuous-majorant coefficient now has three sources only: the small-top square
+term \eqref{eq:small-top-asymptotic-restated}, the square term \eqref{eq:square-term-asymptotic},
+and the correction term \eqref{eq:R-asymptotic}. Keeping these sources separate, from
+\eqref{eq:small-top-asymptotic-restated}, \eqref{eq:square-correction-split},
+\eqref{eq:square-term-asymptotic}, and \eqref{eq:R-asymptotic},
+\[
+\begin{aligned}
+J_B(X)
+&=
+\frac{4\lambda X}{Y}
++
+X
++
+\frac{\lambda\bigl(1-2B+2\log(\lambda/2)\bigr)X}{Y} \\
+&\qquad
++
+\frac{2\lambda(2\log 2-1)X}{Y}
++
+o\left(\frac X Y\right).
+\end{aligned}
+\]
+Thus
+\[
+J_B(X)
+=
+X+
+\frac{\lambda X}{Y}
+\left[4+1-2B+2\log(\lambda/2)+2(2\log 2-1)\right]
++
+o\left(\frac X Y\right).
+\]
+The bracket equals
+\[
+3-2B+4\log 2+2\log(\lambda/2).
+\]
+Since
+\[
+\lambda=\frac1{2\log 2},
+\qquad
+\frac{\lambda}{2}=\frac1{4\log 2},
+\]
+we have
+\[
+2\log(\lambda/2)=-4\log 2-2\log(\log 2),
+\]
+and therefore
+\[
+4\log 2+2\log(\lambda/2)=-2\log(\log 2).
+\]
+Therefore
+\[
+J_B(X)
+=
+X+
+\frac{\lambda\bigl(3-2B-2\log(\log 2)\bigr)X}{Y}
++
+o\left(\frac X Y\right),
+\]
+which proves \eqref{eq:continuous-majorant-asymptotic}.
+
+\proofheading{7. The floor saving}
+
+Define
+\[
+E(X):=\int_X^M f(t)\{G_X(t)\}\,dt,
+\]
+where
+\[
+\{x\}:=x-\lfloor x\rfloor.
+\]
+Since $0\le\{G_X(t)\}<1$, we have the trivial bounds
+\[
+0\le E(X)\le \int_X^M f(t)\,dt.
+\]
+Then
+\[
+\int_X^M f(t)\lfloor G_X(t)\rfloor\,dt
+=
+\int_X^M f(t)G_X(t)\,dt
+-
+E(X).
+\tag{34}\label{eq:floor-decomposition}
+\]
+
+The floor saving is the following lemma.
+\begin{lemma}[Floor saving]
+With the definitions above,
+\[
+E(X)
+=
+2\lambda(1-\gamma)\frac X{\log X}
++o\left(\frac X{\log X}\right).
+\tag{35}\label{eq:floor-saving}
+\]
+\end{lemma}
+
+\begin{proof}
+The proof has four separate steps: a fixed-$Q$ change of variables, a uniform approximation for
+$G_X(\Phi(X/q))$, removal of the fractional-part discontinuities on the fixed interval
+$1\le q\le Q$, and a large-$q$ tail bound with a normalized constant independent of $Q$. The
+relevant discontinuities are those of $q\mapsto\{q\}$ at the integers; this is why the fixed-$Q$
+convergence below first removes small neighborhoods of the finitely many integers in $[1,Q]$.
+
+Put
+\[
+q(t):=Xf(t)=\frac X{\psi(t)}.
+\]
+All occurrences of $\psi$ in this part are on the inverse branch fixed above; after fixing
+$Q$, the lower threshold in $X$ is enlarged whenever necessary so that all displayed arguments
+of $\Phi$ and $\psi$ lie on this branch. Since $\psi$ is increasing, $q(t)$ is decreasing in $t$;
+larger $q$ corresponds to smaller $t$ in the large-top interval.
+Equivalently, if $r=\psi(t)$, then
+\[
+q=\frac Xr,
+\qquad
+ t=\Phi(r)=\Phi(X/q).
+\]
+Fix a real number $Q>1$. In this part, $Q$ is fixed before $X\to\infty$. All lower bounds on
+$X$ may depend on $Q$, and all $o_{A,B,Q}$-terms may depend on $A,B,Q$ and the fixed threshold
+data, but not on $X$. Only after the limiting sandwich is obtained do we let $Q\to\infty$.
+
+For fixed $Q>1$, we have
+\[
+\Phi(X/Q)\asymp_{B,Q}\frac{X^2}{Y}>X
+\]
+for all sufficiently large $X$. Since $Q>1$ and $\Phi$ is increasing on the chosen branch,
+\[
+X<\Phi(X/Q)<M=\Phi(X)
+\]
+for all sufficiently large $X$. Thus $G_X(\Phi(X/q))$ is defined for every $q\in[1,Q]$ once
+$X$ is large enough.
+
+\proofsubheading{\texorpdfstring{Step 1: fixed-$Q$ $q$-change of variables}{Step 1: fixed-Q q-change of variables}}
+
+\begin{lemma}[Fixed-$Q$ $q$-change of variables]
+Here $Q>1$ is fixed before $X\to\infty$; no assertion is made with $Q=Q(X)$. For every bounded
+measurable function $\Theta_X:[1,Q]\to\mathbb R$ satisfying $|\Theta_X|\le1$,
+\[
+\int_{\Phi(X/Q)}^M f(t)\Theta_X(q(t))\,dt
+=
+\frac{2\lambda X}{Y}
+\int_1^Q\frac{\Theta_X(q)}{q^2}\,dq
++
+o_{A,B,Q}\left(\frac X Y\right),
+\tag{36}\label{eq:q-change}
+\]
+uniformly over all such measurable choices of $\Theta_X$.
+\end{lemma}
+
+\begin{proof}
+The uniformity is over the bounded measurable test functions for this fixed $Q$; it is not a
+statement with $Q=Q(X)$. The function $\Theta_X$ is allowed to depend on $X$, and no continuity or
+regularity of $\Theta_X$ is used; the error is controlled below by a supremum before integration.
+For fixed $Q>1$, assume $X$ is so large that $X/Q\ge N_0$. On the interval
+\[
+\Phi(X/Q)\le t\le M=\Phi(X),
+\]
+the monotonicity of $\Phi$ on $[N_0,\infty)$ and the inverse relation between $\Phi$ and
+$\psi$ give
+\[
+X/Q\le\psi(t)\le X,
+\]
+and therefore
+\[
+1\le q(t)\le Q.
+\]
+The monotone $C^1$ change-of-variables theorem applies to these bounded measurable integrands.
+Changing variables $r=\psi(t)$, and then $q=X/r$, gives the endpoint correspondence
+\[
+t=\Phi(X/Q)\Longleftrightarrow q=Q,
+\qquad
+ t=M=\Phi(X)\Longleftrightarrow q=1.
+\]
+Hence
+\[
+\begin{aligned}
+\int_{\Phi(X/Q)}^M f(t)\Theta_X(q(t))\,dt
+&=
+\int_{X/Q}^X
+\frac1r \Theta_X(X/r)\Phi'(r)\,dr \\
+&=
+\int_Q^1
+\Theta_X(q)
+\frac{\Phi'(X/q)}{X/q}
+\left(-\frac{X}{q^2}\right)dq \\
+&=
+\int_1^Q
+\Theta_X(q)
+\frac{\Phi'(X/q)}{X/q}
+\frac{X}{q^2}\,dq.
+\end{aligned}
+\]
+We keep the product in the final integrand in this form because the first factor is uniformly
+approximated by $2\lambda/Y+O_{B,Q}(\log Y/Y^2)$.
+With $Q$ fixed, for $1\le q\le Q$, put
+\[
+w=\log(X/q)=Y-\log q.
+\]
+Then uniformly for $1\le q\le Q$,
+\[
+H(w)=w-\log w+B
+=Y-\log Y+B-\log q+O_Q\left(\frac1Y\right)
+=Y+O_{B,Q}(\log Y),
+\]
+and
+\[
+H'(w)=1-\frac1w=1+O_Q\left(\frac1Y\right).
+\]
+Therefore, uniformly for $1\le q\le Q$,
+\[
+\frac{\Phi'(X/q)}{X/q}
+=
+\lambda\frac{2H(w)-H'(w)}{H(w)^2}
+=
+\frac{2\lambda}{Y}
++
+O_{B,Q}\left(\frac{\log Y}{Y^2}\right).
+\]
+In particular,
+\[
+\sup_{1\le q\le Q}
+\left|
+\frac{\Phi'(X/q)}{X/q}-\frac{2\lambda}{Y}
+\right|
+=
+o_{A,B,Q}\left(\frac1Y\right).
+\]
+Thus the total error in replacing $\Phi'(X/q)/(X/q)$ by $2\lambda/Y$ is bounded by
+\[
+X
+\sup_{1\le q\le Q}
+\left|
+\frac{\Phi'(X/q)}{X/q}-\frac{2\lambda}{Y}
+\right|
+\int_1^Q\frac{dq}{q^2}
+=
+o_{A,B,Q}\left(\frac XY\right),
+\]
+uniformly over all measurable $\Theta_X$ with $|\Theta_X|\le1$. The constant is uniform because $Q$ is
+fixed before the limit $X\to\infty$; no uniformity in growing $Q$ is asserted here. This proves
+\eqref{eq:q-change}.
+\end{proof}
+
+\begin{lemma}[Uniform approximation to $q$]
+Uniformly for $1\le q\le Q$,
+\[
+G_X(\Phi(X/q))=q+O_{B,Q}\left(\frac YX\right).
+\tag{37}\label{eq:GX-q-uniform}
+\]
+\end{lemma}
+
+\begin{proof}
+Put
+\[
+t=\Phi(X/q),
+\qquad
+1\le q\le Q.
+\]
+Then, since $H(Y-\log q)=Y+O_{B,Q}(\log Y)$,
+\[
+t=\lambda\frac{(X/q)^2}{H(Y-\log q)}
+\asymp_{B,Q}\frac{X^2}{q^2Y},
+\qquad
+\frac Xt=O_B\left(\frac{q^2Y}{X}\right)=O_{B,Q}\left(\frac YX\right),
+\]
+and also
+\[
+\frac{qX}{t}=O_B\left(\frac{q^3Y}{X}\right)
+=O_{B,Q}\left(\frac YX\right).
+\]
+In particular $t\to\infty$ uniformly for $1\le q\le Q$, so the threshold in
+\eqref{eq:local-lipschitz} with $c=1/2$ is exceeded uniformly for fixed $Q$. For
+$s\in[t-X,t]$, we have $s\in[t/2,t]$ for all sufficiently large $X$. By
+\eqref{eq:local-lipschitz},
+\[
+f(s)=f(t)+O_B\left(\frac{f(t)}tX\right)
+\]
+uniformly in $q\in[1,Q]$. Therefore
+\[
+G_X(t)
+=
+\int_{t-X}^t f(s)\,ds
+=
+Xf(t)+O_B\left(\frac{f(t)X^2}{t}\right).
+\]
+Since
+\[
+\psi(\Phi(X/q))=X/q,
+\qquad
+ f(\Phi(X/q))=\frac qX,
+\]
+we obtain, using the preceding bound on $qX/t$,
+\[
+G_X(t)=q+O_B\left(\frac{qX}{t}\right)
+=q+O_B\left(\frac{q^3Y}{X}\right)
+=q+O_{B,Q}\left(\frac YX\right),
+\]
+which proves \eqref{eq:GX-q-uniform}.
+\end{proof}
+
+\proofsubheading{Step 2: fractional-part convergence away from discontinuities}
+
+\begin{lemma}[Fractional-part convergence on a fixed $q$-range]
+For every fixed real $Q>1$,
+\[
+\int_{\Phi(X/Q)}^M f(t)\{G_X(t)\}\,dt
+=
+\frac{2\lambda X}{Y}
+\int_1^Q\frac{\{q\}}{q^2}\,dq
++
+o_{A,B,Q}\left(\frac X Y\right).
+\tag{38}\label{eq:floor-main-truncation}
+\]
+\end{lemma}
+
+\begin{proof}
+The following compactness argument is the discontinuity-removal step for the fractional-part map.
+Since $q\mapsto\Phi(X/q)$ is continuous on $[1,Q]$ and $f$ is locally integrable, the primitive
+\[
+P(t):=\int_0^t f(s)\,ds
+\]
+is absolutely continuous on compact intervals, and hence continuous. For $t\ge X$,
+\[
+G_X(t)=P(t)-P(t-X),
+\]
+so $G_X$ is continuous on $[X,\infty)$. Hence the function
+\[
+\Theta_X(q):=\{G_X(\Phi(X/q))\}
+\]
+is measurable. Since \eqref{eq:q-change} is uniform over all measurable $|\Theta_X|\le1$, it may be
+applied to this $X$-dependent choice.
+
+The only obstruction to replacing $\{G_X(\Phi(X/q))\}$ by $\{q\}$ is crossing an integer; the next
+paragraph removes small neighborhoods of the finitely many relevant integers.
+For fixed $Q>1$ and $\eta>0$, choose $\mathcal U_\eta\subset[1,Q]$ to be a finite union of small
+relatively open intervals around the integers in $[1,Q]$, using one-sided intervals at endpoint
+integers if present, such that
+\[
+\int_{\mathcal U_\eta}\frac{dq}{q^2}<\eta.
+\]
+This is possible because there are only finitely many integers in $[1,Q]$. Endpoint behavior is
+irrelevant for the Lebesgue integral; including endpoint integers only makes the uniform
+convergence statement on the complement unambiguous. Let
+\[
+S_\eta:=[1,Q]\setminus \mathcal U_\eta.
+\]
+If $S_\eta=\varnothing$, the convergence claim below is vacuous. Otherwise, $S_\eta$ is compact
+and has positive distance from the finite set $\mathbb Z\cap[0,Q+1]$; all other integers are
+farther away from $[1,Q]$. Call this distance $\rho_\eta>0$. Thus
+\[
+\operatorname{dist}(q,\mathbb Z)\ge\rho_\eta
+\qquad(q\in S_\eta).
+\]
+By the uniform convergence \eqref{eq:GX-q-uniform}, for large $X$,
+\[
+\left|G_X(\Phi(X/q))-q\right|<\frac{\rho_\eta}{2}
+\]
+uniformly for $q\in S_\eta$. Therefore no integer is crossed: $G_X(\Phi(X/q))$ and $q$ lie in
+the same connected component of $\mathbb R\setminus\mathbb Z$. On the relevant component away
+from the removed neighborhoods, the fractional-part map is Lipschitz with constant $1$, so
+\[
+\left|\{G_X(\Phi(X/q))\}-\{q\}\right|
+\le
+\left|G_X(\Phi(X/q))-q\right|.
+\]
+Hence
+\[
+\{G_X(\Phi(X/q))\}\to\{q\}
+\]
+uniformly for $q\in S_\eta$.
+
+Applying \eqref{eq:q-change} to
+\[
+\Theta_X(q):=\{G_X(\Phi(X/q))\},
+\]
+and using that, for $t\in[\Phi(X/Q),M]$,
+\[
+\Phi(X/q(t))=\Phi(\psi(t))=t,
+\]
+we get
+\[
+\int_{\Phi(X/Q)}^M f(t)\{G_X(t)\}\,dt
+=
+\frac{2\lambda X}{Y}
+\int_1^Q
+\frac{\{G_X(\Phi(X/q))\}}{q^2}\,dq
++
+o_{A,B,Q}\left(\frac X Y\right).
+\]
+On $S_\eta$, the integrand converges uniformly to $\{q\}/q^2$. On $\mathcal U_\eta$, both fractional
+parts lie in $[0,1)$, so the total possible discrepancy is at most
+\[
+\int_{\mathcal U_\eta}\frac{dq}{q^2}<\eta.
+\]
+Therefore
+\[
+\limsup_{X\to\infty}
+\left|
+\int_1^Q
+\frac{\{G_X(\Phi(X/q))\}-\{q\}}{q^2}\,dq
+\right|
+\le \eta.
+\]
+Letting $\eta\downarrow0$, we get \eqref{eq:floor-main-truncation}.
+\end{proof}
+
+\proofsubheading{\texorpdfstring{Step 3: large-$q$ floor-tail estimate with $Q$-independent constant}%
+{Step 3: large-q floor-tail estimate with Q-independent constant}}
+
+\begin{lemma}[Fixed-$Q$ large-$q$ floor-tail estimate]
+For every fixed real $Q>1$, fixed independently of $X$, all sufficiently large $X$ satisfy
+\[
+\int_X^{\Phi(X/Q)} f(t)\{G_X(t)\}\,dt
+\le
+C_B\frac X{QY},
+\tag{39}\label{eq:floor-tail-bound}
+\]
+where $C_B$ is independent of $Q$, while the lower threshold for $X$ may depend on the fixed
+value of $Q$.
+\end{lemma}
+
+\begin{proof}
+It remains to control the range
+\[
+X\le t\le\Phi(X/Q),
+\]
+which is the large-$q$ tail because $q(t)=X/\psi(t)$ decreases as $t$ increases. Splitting
+$E(X)$ at the common endpoint
+$t=\Phi(X/Q)$ changes no integral, since that endpoint has measure zero. Only a normalized
+bound tending to zero as $Q\to\infty$ is
+needed here; no asymptotic for this range is required. By the lower-endpoint expansion
+\eqref{eq:lower-endpoint-asymptotic}, writing $r_0=\psi(X)$,
+\[
+\log r_0=\frac12Y+O_B(\log Y),
+\]
+and hence $X/r_0\to\infty$. Since $\psi$ is increasing, $q(t)=X/\psi(t)$ is decreasing, with
+endpoint correspondence
+\[
+t=X\Longleftrightarrow q=\frac{X}{r_0},
+\qquad
+ t=\Phi(X/Q)\Longleftrightarrow q=Q.
+\]
+Thus this interval corresponds to $q\ge Q$ for all sufficiently large $X$. Endpoints do not
+affect the integral. For each fixed $Q>1$, this interval is nonempty for all sufficiently large
+$X$, because
+\[
+\Phi(X/Q)\asymp_{B,Q}\frac{X^2}{Y}\gg X.
+\]
+Since
+\[
+0\le\{G_X(t)\}<1,
+\]
+we have
+\[
+0\le
+\int_X^{\Phi(X/Q)} f(t)\{G_X(t)\}\,dt
+\le
+\int_X^{\Phi(X/Q)} f(t)\,dt.
+\]
+For each fixed $Q>1$, the lower-endpoint lemma gives $r_0=\psi(X)=o(X/Q)$, so all sufficiently
+large $X$ satisfy
+\[
+r_0<X/Q.
+\]
+This strict inequality fixes the orientation of the change of variables below. Here $X>T_*$ for
+all sufficiently large $X$, so $r_0=\psi(X)$ is evaluated on the same inverse branch.
+
+For fixed $Q$, all sufficiently large $X$ also satisfy $X/Q\ge N_0$, so both endpoints are on
+the monotone branch of $\Phi$. Changing variables $t=\Phi(r)$, the last integral becomes
+\[
+\int_{r_0}^{X/Q}\frac{\Phi'(r)}r\,dr.
+\]
+Now, for all sufficiently large $r$,
+\[
+H(\log r)\asymp_B\log r,
+\qquad
+2H(\log r)-H'(\log r)\asymp_B\log r.
+\]
+Thus
+\[
+\frac{\Phi'(r)}r
+=
+\lambda\frac{2H(\log r)-H'(\log r)}{H(\log r)^2}
+\ll_B
+\frac1{\log r}
+\]
+uniformly for all $r\ge r_B$, with a constant depending only on $B$, after choosing a sufficiently
+large threshold $r_B$. Increase the lower threshold in $X$ so that $r_0\ge r_B$ and
+$X/Q\ge N_0$. Since
+\[
+\log r_0=\frac12Y+O_B(\log Y),
+\]
+we have $\log r_0\ge Y/3$ for all sufficiently large $X$. Throughout this range, therefore,
+\[
+\log r\ge\log r_0\ge \frac Y3.
+\]
+Consequently, using the interval orientation $r_0<X/Q$ just established,
+\[
+0\le \frac XQ-r_0\le \frac XQ.
+\]
+Therefore
+\[
+\int_{r_0}^{X/Q}\frac{\Phi'(r)}r\,dr
+\ll_B
+\int_{r_0}^{X/Q}\frac{dr}{Y}
+\le
+C_B\frac{X}{QY}.
+\]
+Therefore \eqref{eq:floor-tail-bound} follows. No sharper asymptotic is needed for this tail; the
+$Q$-uniform normalized $O(1/Q)$ bound is enough after $Q\to\infty$. Equivalently,
+\[
+\frac{Y}{2\lambda X}
+\int_X^{\Phi(X/Q)} f(t)\{G_X(t)\}\,dt
+\ll_B
+\frac1Q.
+\tag{40}\label{eq:floor-tail-normalized}
+\]
+Using the normalized form \eqref{eq:floor-tail-normalized}, the estimate also gives, in
+limsup form,
+\[
+\limsup_{X\to\infty}
+\frac{Y}{2\lambda X}
+\int_X^{\Phi(X/Q)} f(t)\{G_X(t)\}\,dt
+\le
+\frac{C_B}{Q},
+\]
+with $C_B$ independent of $Q$. Hence
+\[
+\lim_{Q\to\infty}\limsup_{X\to\infty}
+\frac{Y}{2\lambda X}
+\int_X^{\Phi(X/Q)} f(t)\{G_X(t)\}\,dt=0.
+\]
+\end{proof}
+
+Combining \eqref{eq:floor-main-truncation} and \eqref{eq:floor-tail-bound}, and keeping the order
+of limits $X\to\infty$ first with $Q$ fixed and then $Q\to\infty$, gives the desired sandwich.
+The implicit constant in the normalized $O(1/Q)$ tail bound is independent of $Q$; only the lower
+threshold for $X$ may depend on the fixed value of $Q$. This independence is the only property of
+the large-$q$ tail used in the final sandwich. Let
+\[
+\mathcal I_Q:=\int_1^Q\frac{\{q\}}{q^2}\,dq,
+\qquad
+\mathcal I:=\int_1^\infty\frac{\{q\}}{q^2}\,dq.
+\]
+The integral defining $\mathcal I$ converges because
+\[
+0\le\frac{\{q\}}{q^2}\le\frac1{q^2}.
+\]
+For fixed $Q>1$, write
+\[
+E_{\le Q}(X):=\int_{\Phi(X/Q)}^M f(t)\{G_X(t)\}\,dt,
+\qquad
+E_{>Q}(X):=\int_X^{\Phi(X/Q)} f(t)\{G_X(t)\}\,dt.
+\]
+The subscripts refer to the corresponding $q$-range, not to the orientation of the
+$t$-intervals.
+Then $E(X)=E_{\le Q}(X)+E_{>Q}(X)$ up to the common endpoint, which has measure zero, and
+$E_{>Q}(X)\ge0$. By \eqref{eq:floor-main-truncation},
+\[
+\frac{Y}{2\lambda X}E_{\le Q}(X)\to \mathcal I_Q,
+\]
+while the normalized tail estimate above, with a $Q$-independent constant, gives
+\[
+0\le \limsup_{X\to\infty}\frac{Y}{2\lambda X}E_{>Q}(X)\le\frac{C_B}{Q}.
+\]
+In unnormalized form, the compact summary is
+\[
+E_{\le Q}(X)=\frac{2\lambda X}{Y}\mathcal I_Q+o_{A,B,Q}\left(\frac X Y\right),
+\qquad
+0\le E_{>Q}(X)\ll_B \frac{X}{QY}
+\]
+with $X\to\infty$ at fixed $Q$, and only then $Q\to\infty$.
+The order of limits in the next displays is
+\[
+X\to\infty\quad\text{with }Q\text{ fixed, and then}\quad Q\to\infty.
+\]
+For every fixed $Q>1$, the preceding estimates imply
+\[
+\liminf_{X\to\infty}
+\frac{Y E(X)}{2\lambda X}
+\ge \mathcal I_Q,
+\qquad
+\limsup_{X\to\infty}
+\frac{Y E(X)}{2\lambda X}
+\le \mathcal I_Q+\frac{C_B}{Q},
+\]
+with $C_B$ enlarged if necessary. Equivalently,
+\[
+\mathcal I_Q
+\le
+\liminf_{X\to\infty}
+\frac{Y E(X)}{2\lambda X}
+\le
+\limsup_{X\to\infty}
+\frac{Y E(X)}{2\lambda X}
+\le
+\mathcal I_Q+\frac{C_B}{Q}.
+\]
+Letting $Q\to\infty$, using $\mathcal I_Q\uparrow \mathcal I$ by monotone
+convergence and $C_B/Q\to0$, gives the normalized convergence
+\[
+\frac{Y E(X)}{2\lambda X}\to \mathcal I.
+\]
+Equivalently,
+\[
+E(X)
+=
+\frac{2\lambda X}{Y}
+\int_1^\infty\frac{\{q\}}{q^2}\,dq
++
+o\left(\frac X Y\right).
+\tag{41}\label{eq:E-asymptotic}
+\]
+It remains to compute the integral. Endpoint values of the fractional-part function are
+immaterial here, since they affect only a measure-zero set. By nonnegativity, monotone
+convergence permits the split into unit intervals:
+\[
+\int_1^\infty\frac{\{q\}}{q^2}\,dq
+=
+\sum_{m=1}^\infty
+\int_m^{m+1}\frac{q-m}{q^2}\,dq.
+\]
+For each $m\ge1$,
+\[
+\int_m^{m+1}\frac{q-m}{q^2}\,dq
+=
+\log\frac{m+1}{m}-\frac1{m+1}.
+\]
+Therefore
+\[
+\sum_{m=1}^K
+\left(
+\log\frac{m+1}{m}-\frac1{m+1}
+\right)
+=
+\log(K+1)-\sum_{m=1}^K\frac1{m+1}.
+\]
+Since
+\[
+\sum_{m=1}^K\frac1{m+1}
+=
+\sum_{j=1}^{K+1}\frac1j-1,
+\]
+we get
+\[
+\sum_{m=1}^K
+\left(
+\log\frac{m+1}{m}-\frac1{m+1}
+\right)
+=
+\log(K+1)-\sum_{j=1}^{K+1}\frac1j+1.
+\]
+Letting $K\to\infty$, and using the definition of $\gamma$,
+\[
+\int_1^\infty\frac{\{q\}}{q^2}\,dq=1-\gamma.
+\]
+This value is positive because the integrand is nonnegative and positive on a set of positive
+measure; numerically, $1-\gamma=0.42278\ldots$. Substituting this into
+\eqref{eq:E-asymptotic} proves the floor-saving lemma, namely \eqref{eq:floor-saving}.
+\end{proof}
+
+\proofheading{8. Final contradiction}
+
+We have proved the two asymptotic evaluations
+\[
+J_B(X)
+=
+X+
+\frac{\lambda\bigl(3-2B-2\log(\log 2)\bigr)X}{Y}
++
+o\left(\frac X Y\right),
+\]
+and
+\[
+E(X)=2\lambda(1-\gamma)\frac X Y+
+o\left(\frac X Y\right).
+\]
+Recall that $X$ in this final comparison runs through sufficiently large positive integers.
+The final comparison uses \eqref{eq:fundamental-upper-bound}, \eqref{eq:floor-decomposition},
+\eqref{eq:continuous-majorant-asymptotic}, and \eqref{eq:floor-saving}; the continuous
+asymptotic \eqref{eq:continuous-majorant-asymptotic} is assembled from
+\eqref{eq:small-top-asymptotic-restated}, \eqref{eq:square-term-asymptotic}, and
+\eqref{eq:R-asymptotic}. From \eqref{eq:fundamental-upper-bound},
+\[
+X
+\le
+\frac12\left(\int_0^X f(t)\,dt\right)^2
++
+\int_X^M f(t)\lfloor G_X(t)\rfloor\,dt
++
+o\left(\frac X Y\right).
+\]
+Using \eqref{eq:floor-decomposition} and the definition of $J_B(X)$, this becomes
+\[
+X\le J_B(X)-E(X)+o\left(\frac X Y\right).
+\]
+By \eqref{eq:continuous-majorant-asymptotic} and \eqref{eq:floor-saving},
+\[
+\begin{aligned}
+X
+&\le
+X+
+\frac{\lambda\bigl(3-2B-2\log(\log 2)\bigr)X}{Y} \\
+&\qquad
+-
+\frac{2\lambda(1-\gamma)X}{Y}
++
+o\left(\frac X Y\right).
+\end{aligned}
+\]
+The coefficient of $X/Y$ is
+\[
+\lambda\bigl(3-2B-2\log(\log 2)\bigr)-2\lambda(1-\gamma)
+=
+-2\lambda(B-B_1).
+\]
+Let
+\[
+\delta:=B-B_1>0.
+\]
+Hence the preceding inequality gives
+\[
+0\le -\frac{2\lambda\delta X}{Y}+o\left(\frac X Y\right).
+\]
+After division by $X/Y$ along integer $X\to\infty$, write the error term as
+$\eta_X=o(1)$. Thus
+\[
+0\le -2\lambda\delta+\eta_X.
+\]
+For all sufficiently large integer $X$, $|\eta_X|\le\lambda\delta$, and hence
+\[
+0\le -2\lambda\delta+\eta_X\le -\lambda\delta<0,
+\]
+which is impossible.
+
+Thus the assumed eventual upper bound \eqref{eq:upper-bound-assumption} cannot hold. Given an
+integer $N$, choose an integer $N'\ge \max\{N,2\}$. If every $n\ge N'$ satisfied the non-strict
+upper bound, then the forbidden eventual upper bound would hold from $N'$ onward. Therefore there
+exists $n\ge N'$ such that
+\[
+u(n)>\lambda\frac{n^2}{\log n-\log\log n+B}.
+\]
+This proves the main assertion.
+
+\proofheading{Fixed-constant limsup consequence}
+
+Fix a real constant $C$ and fix one value $B^*>B_1$. Apply the main assertion just proved with
+this value of $B^*$. Then there is an unbounded sequence $n_j$ such that
+\[
+u(n_j)
+>
+\lambda\frac{n_j^2}{\log n_j-\log\log n_j+B^*}.
+\]
+This uses no limiting process $B^*\downarrow B_1$ inside the contradiction argument and does not
+substitute $B=B_1$ in the pointwise inequality. Discarding finitely many terms if necessary, both
+quantities
+\[
+\log n_j-\log\log n_j+C
+\]
+and
+\[
+\log n_j-\log\log n_j+B^*
+\]
+are positive along this sequence. Therefore the following division and multiplication preserve
+the inequality sign, and along this unbounded sequence,
+\[
+\frac{u(n_j)(\log n_j-\log\log n_j+C)}{n_j^2}
+>
+\lambda
+\frac{\log n_j-\log\log n_j+C}
+{\log n_j-\log\log n_j+B^*}.
+\]
+The fixed additive difference $B^*-C$ is negligible compared with $\log n_j$; explicitly,
+\[
+\frac{\log n_j-\log\log n_j+C}
+{\log n_j-\log\log n_j+B^*}
+=
+1-
+\frac{B^*-C}{\log n_j-\log\log n_j+B^*}
+\to1.
+\]
+The right-hand side tends to $\lambda$. Since the left-hand side is bounded below along this
+sequence by quantities tending to $\lambda$, the full limsup is at least $\lambda$. Hence, for
+every fixed real $C$,
+\[
+\limsup_{n\to\infty}
+\frac{u(n)(\log n-\log\log n+C)}{n^2}
+\ge\lambda.
+\]
+Since
+\[
+\lambda=\frac1{2\log 2},
+\]
+this is the fixed-constant limsup assertion in the theorem. Taking $C=B_1$ gives the endpoint
+limsup version there. Since
+\[
+\frac{\log n}{\log n-\log\log n}\to1,
+\]
+the conclusion with $C=0$ also gives
+\[
+\limsup_{n\to\infty}
+\frac{u(n)\log n}{n^2}
+\ge
+\frac1{2\log 2}.
+\]
+\end{proof}
+
+\medskip
+\phantomsection
+\pdfbookmark[1]{Authorship, Lean proof, and verification disclosure}{disclosure}
+\noindent\textit{Authorship, Lean proof, and verification disclosure.} GPT-5.5 Pro is listed as
+first author because it produced nearly all of the mathematical derivation, proof structuring, and
+LaTeX drafting through prompted interaction. Lech Mazur prompted, selected, audited, edited,
+curated, and is responsible for the public posting of this draft. A companion Lean proof is
+available at \url{https://github.com/lechmazur/erdos_1194/}. This public draft has not been
+independently refereed, and neither the Lean proof nor the other checks should be regarded as
+journal peer review.
+
+\begin{thebibliography}{99}
+
+\bibitem{AlexeevMixon2026}
+B. Alexeev and D. G. Mixon,
+\emph{Forbidden Sidon subsets of perfect difference sets, featuring a human-assisted proof},
+arXiv:2510.19804v2 [math.CO], submitted 2025-10-22, revised 2026-01-16,
+\url{https://doi.org/10.48550/arXiv.2510.19804}.
+
+\bibitem{Bloom1194}
+T. F. Bloom,
+\emph{Erd\H{o}s Problem \#1194},
+Erd\H{o}s Problems,
+\url{https://www.erdosproblems.com/1194},
+page last edited 2026-04-24, accessed 2026-04-29.
+
+\bibitem{CillerueloNathanson2008}
+J. Cilleruelo and M. B. Nathanson,
+\emph{Perfect difference sets constructed from Sidon sets},
+Combinatorica \textbf{28} (2008), 401--414,
+\url{https://doi.org/10.1007/s00493-008-2339-4}.
+
+\bibitem{Erdos1980}
+P. Erd\H{o}s,
+\emph{A survey of problems in combinatorial number theory},
+Annals of Discrete Mathematics \textbf{6} (1980), 89--115,
+\url{https://doi.org/10.1016/S0167-5060(08)70697-6}.
+
+\bibitem{HalberstamRoth1966}
+H. Halberstam and K. F. Roth,
+\emph{Sequences. Vol. I},
+Clarendon Press, Oxford, 1966.
+
+\bibitem{Lev2004}
+V. F. Lev,
+\emph{Reconstructing integer sets from their representation functions},
+Electronic Journal of Combinatorics \textbf{11} (2004), no.~1, Research Paper 78, 6 pp.,
+\url{https://doi.org/10.37236/1831}.
+
+\end{thebibliography}
+
+\end{document}
