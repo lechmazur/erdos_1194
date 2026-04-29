@@ -135,11 +135,13 @@ The catalogue page records a greedy construction due to Lev, with growth $u(n)\l
 representation-top notation \cite{Lev2004,Bloom1194}. It also records the standard Sidon-density
 argument, based on Erd\H{o}s's upper bound for infinite Sidon sequences as presented, for example,
 by Halberstam and Roth, which yields $u(n)\gg n\log n$ infinitely often
-\cite{HalberstamRoth1966,Bloom1194}. The same catalogue page records unrefereed
-discussion-thread claims at the $n^{2-o(1)}$ scale; those claims are not used here
-\cite{Bloom1194}. The present draft gives
-a self-contained explicit lower bound at the $n^2/\log n$ scale, including the constant and the
-second-order denominator below.
+\cite{HalberstamRoth1966,Bloom1194}. The discussion page also records subsequent progress around
+this problem: Liam Price linked a GPT-5.4 Pro note, and Thomas Bloom distilled from the ensuing
+discussion an argument giving $a_n\gg n^{3/2}$ infinitely often. Bloom then reported a GPT Pro
+improvement to $a_n\gg n^{2-o(1)}$ infinitely often, and suggested an optimized
+$n^2/f(n)$-type form under the convergence condition $\sum_n 1/(n f(n))<\infty$
+\cite{Bloom1194}. The present draft gives a separate fully written logarithmic lower bound with
+explicit constants and a companion Lean formalization.
 
 The perfect-difference hypothesis implies the Sidon property that all unordered pair sums
 $a+b$, with $a\le b$ and $a,b\in A$, are distinct. Indeed, suppose $a\le b$, $c\le d$, and
