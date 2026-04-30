@@ -1685,10 +1685,7 @@ theorem large_floor_sum_error_bound
       ring
 
 /--
-Assembly of the remaining M5 error estimates.
-
-This packages the small-top replacement error, fixed-width short-top contribution, and
-large floor-sum/integral replacement into the error-function form required by
+Assembly of the finite-counting error estimates into the error-function form required by
 `FundamentalUpperBound`.
 -/
 theorem three_part_error_bound

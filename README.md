@@ -1,8 +1,8 @@
-# A Floor-Saving Logarithmic Lower Bound for Erdos Problem #1194
+# A Lean Proof for Erdos Problem #1194
 
-This repository contains a Lean 4/mathlib formalization and the accompanying
-mathematical writeup for a logarithmic lower bound in the infinite perfect
-difference set problem.
+This repository contains a Lean 4/mathlib proof of a logarithmic lower bound in
+the infinite perfect difference set problem. The Lean statement is the public
+entry point; the explanatory notes are secondary.
 
 Let `A` be a set of positive integers such that every `n >= 1` has exactly one
 ordered representation
@@ -34,32 +34,27 @@ limsup_{n -> infinity} u(n) * (log n - log log n + B_1) / n^2
 The endpoint statement is a limsup consequence only; it does not assert the
 pointwise infinitely-often inequality at `B = B_1`.
 
-## Documents
+## Trusted Statement
 
-- [Proof sketch (PDF)](docs/reference/floor_saving_proof_sketch.pdf)
-- [Proof sketch (TeX)](docs/reference/floor_saving_proof_sketch.tex)
-- [Full mathematical proof (PDF)](docs/reference/floor_saving_lower_bound_final_version.pdf)
-- [Full mathematical proof (TeX)](docs/reference/floor_saving_lower_bound_final_version.tex)
-- [Equation index](docs/reference/EQUATION_INDEX.md)
-
-## Formalization
-
-The Lean project is in the `FloorSaving` library. Important public declarations:
+Read [`Challenge.lean`](Challenge.lean) first. It imports only `Mathlib`, defines
+the vocabulary used in the statements, and contains the two theorem statements
+that comparator checks:
 
 - `FloorSaving.floor_saving_lower_bound`
-- `FloorSaving.not_eventually_upper_bound`
 - `FloorSaving.endpoint_limsup`
-- `FloorSaving.endpoint_frequently_lower_bound`
-- `FloorSaving.denom_ratio_tendsto_one`
+
+[`Solution.lean`](Solution.lean) imports the proved `FloorSaving` library for
+comparison against the challenge statements.
+
+## Proof Layout
 
 The main theorem is proved in
-[`FloorSaving/MainSkeleton.lean`](FloorSaving/MainSkeleton.lean), using the
-analytic and counting layers. The endpoint limsup packaging is proved in
+[`FloorSaving/MainSkeleton.lean`](FloorSaving/MainSkeleton.lean). The endpoint
+limsup consequence is proved in
 [`FloorSaving/EndpointLimsup.lean`](FloorSaving/EndpointLimsup.lean).
 
-The formalization-status notes are in [`docs/formalization`](docs/formalization).
-They are included to make the proof architecture, interface boundaries, and
-mathlib discovery decisions auditable.
+The top-level module [`FloorSaving.lean`](FloorSaving.lean) imports the full
+proof.
 
 ## Checking
 
@@ -69,26 +64,37 @@ This project uses Lean `4.30.0-rc2` and mathlib, pinned by:
 - [`lakefile.toml`](lakefile.toml)
 - [`lake-manifest.json`](lake-manifest.json)
 
-To check the formalization:
+To check the Lean proof:
 
 ```bash
 lake exe cache get
 lake build FloorSaving
-scripts/audit_sorries.sh . || true
 tools/check_no_sorry.sh
 ```
 
-The publication bundle was prepared from source commit:
+`Challenge.lean` intentionally has statement placeholders for comparator. The
+no-sorry check is scoped to the proof library.
 
-```text
-c5d06adbe90f5d095a6b793349a118131443afe7
+For an independent statement/proof comparison, use
+[`comparator.json`](comparator.json):
+
+```bash
+lake env comparator comparator.json
 ```
 
-At bundle creation time, the root Lean build and the placeholder audits passed.
+This requires `landrun`, `lean4export`, and `comparator` on `PATH`, with
+versions compatible with Lean `v4.30.0-rc2`. See [`AUDIT.md`](AUDIT.md) for the
+audit workflow.
+
+## Explanatory Notes
+
+- [Proof sketch (PDF)](docs/reference/floor_saving_proof_sketch.pdf)
+- [Proof sketch (TeX)](docs/reference/floor_saving_proof_sketch.tex)
+- [Detailed notes (PDF)](docs/reference/floor_saving_lower_bound_final_version.pdf)
+- [Detailed notes (TeX)](docs/reference/floor_saving_lower_bound_final_version.tex)
+- [Equation index](docs/reference/EQUATION_INDEX.md)
 
 ## Notes
 
-The mathematical manuscript includes a disclosure that generative AI tools were
-used for ideation, derivation assistance, drafting, internal-consistency checks,
-and editing. The Lean formalization is included as the machine-checkable proof
-artifact.
+Generative AI tools assisted with development and drafting. The proof artifact
+is the Lean code checked by Lake and, for statement matching, comparator.

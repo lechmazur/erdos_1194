@@ -35,8 +35,8 @@ theorem eventually_scaleNat_pos :
 /--
 Final contradiction once the analytic and counting interfaces are available.
 
-This is the target for milestone M6. It should be proved before the analytic asymptotics are
-expanded, using only the fields of `FinalAnalyticFacts` and `FundamentalUpperBound`.
+The argument uses only the two final analytic asymptotics packaged in
+`FinalAnalyticFacts` and the counting upper bound `FundamentalUpperBound`.
 -/
 theorem contradiction_from_interfaces
     {B : ℝ} (D : PhiPsiData B)

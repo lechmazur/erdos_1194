@@ -54,8 +54,8 @@ theorem eventually_denom_pos (B : ℝ) :
 /--
 Analytic data used by the combinatorial contradiction.
 
-This is an interface. The first formalization pass should prove the contradiction assuming such
-objects and their properties. Later work constructs this structure from `PhiFormula` on a tail.
+The structure packages the tail branch of `PhiFormula`, its inverse, and the
+positive decreasing majorant used in the counting argument.
 -/
 structure PhiPsiData (B : ℝ) where
   /-- Integer lower tail threshold. The TeX proof eventually takes this at least `3`. -/

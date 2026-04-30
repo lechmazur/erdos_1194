@@ -1,31 +1,20 @@
-.PHONY: env discovery build-basic build-unique build-counting build-main build-all audit audit-imports no-sorry
+.PHONY: build challenge solution audit no-sorry comparator
 
-env:
-	tools/lean_env_report.sh
+build:
+	lake build FloorSaving
 
-discovery:
-	scripts/run_discovery.sh
+challenge:
+	lake build Challenge
 
-build-basic:
-	lake build FloorSaving.Basic
-
-build-unique:
-	lake build FloorSaving.UniqueDiff
-
-build-counting:
-	lake build FloorSaving.Counting
-
-build-main:
-	lake build FloorSaving.MainSkeleton
-
-build-all:
-	scripts/build_targets.sh
+solution:
+	lake build Solution
 
 audit:
-	scripts/audit_sorries.sh . || true
-
-audit-imports:
-	scripts/audit_imports.sh .
+	scripts/audit_sorries.sh .
+	tools/check_no_sorry.sh
 
 no-sorry:
 	tools/check_no_sorry.sh
+
+comparator:
+	lake env comparator comparator.json
