@@ -1,4 +1,4 @@
-# A Lean Proof for Erdos Problem #1194
+# A Lean Formalization of the Floor-Saving Lower Bound for Erdos Problem #1194
 
 This repository contains a Lean 4/mathlib proof of a logarithmic lower bound in
 the infinite perfect difference set problem. The Lean statement is the public
