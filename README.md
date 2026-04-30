@@ -5,31 +5,29 @@ the infinite perfect difference set problem. The Lean statement is the public
 entry point; the explanatory notes are secondary.
 
 Let `A` be a set of positive integers such that every `n >= 1` has exactly one
-ordered representation
+ordered representation:
 
-```text
-n = u(n) - v(n),    u(n), v(n) in A,    u(n) > v(n).
-```
+<p align="center">
+  <img src="docs/assets/formulas/unique-difference.png" alt="n = u(n) - v(n), with u(n), v(n) in A and u(n) > v(n), for n >= 1" width="900">
+</p>
 
 The main result proves that, with
 
-```text
-lambda = 1 / (2 log 2)
-B_1 = 1/2 + gamma - log(log 2),
-```
+<p align="center">
+  <img src="docs/assets/formulas/constants.png" alt="lambda = 1 / (2 log 2), and B_1 = 1/2 + gamma - log(log 2)" width="680">
+</p>
 
 for every fixed `B > B_1` there are arbitrarily large `n` such that
 
-```text
-u(n) > lambda * n^2 / (log n - log log n + B).
-```
+<p align="center">
+  <img src="docs/assets/formulas/main-bound.png" alt="u(n) > lambda n^2 divided by log n minus log log n plus B, for B greater than B_1, infinitely often" width="900">
+</p>
 
 It also proves the endpoint limsup consequence
 
-```text
-limsup_{n -> infinity} u(n) * (log n - log log n + B_1) / n^2
-  >= 1 / (2 log 2).
-```
+<p align="center">
+  <img src="docs/assets/formulas/endpoint-limsup.png" alt="limsup as n tends to infinity of u(n) times (log n minus log log n plus B_1) divided by n squared is at least 1 divided by 2 log 2" width="780">
+</p>
 
 The endpoint statement is a limsup consequence only; it does not assert the
 pointwise infinitely-often inequality at `B = B_1`.
